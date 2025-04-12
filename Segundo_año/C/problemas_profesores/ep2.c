@@ -10,6 +10,6 @@ int main(){
         sum = numcom1 + numcom2;
         printf("%d \n",sum);
     }
-    return 0;
+
 
 }

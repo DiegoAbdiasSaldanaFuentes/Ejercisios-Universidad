@@ -4,11 +4,6 @@ Imprimir los números del 1 al 10 en
 forma ascendente
 */ 
 
-/*ejersicio 2
-Visualiza los números del 1 al 10
-Imprimir los números del 1 al 10 en
-forma descendente
-*/
 #include <stdio.h>
 int main(){
     int num;
@@ -20,5 +15,4 @@ int main(){
     for(num =10;num >=1;--num){
         printf("%d \n",num);
     }
-    return 0;
 }
