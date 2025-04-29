@@ -12,7 +12,7 @@ int main(){
     char texto[100];
     int i, longitud = 0;
     printf("Ingresa una cadena de texto: ");
-    scanf("%s",&texto);
+    scanf(" %s",&texto);
     // Calculamos la longitud manualmente
     for(i = 0; texto[i] != '\0'; i++){
         longitud++;
@@ -22,7 +22,7 @@ int main(){
     printf("Texto invertido: ");
     for(i = longitud - 1; i >= 0; i--){
         printf("%s",longitud);
-        printf("%c", texto[i]);
+        printf("%s", texto[i]);
     }
     printf("\n");
     return 0;
