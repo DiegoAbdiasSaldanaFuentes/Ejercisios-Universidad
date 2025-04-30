@@ -16,13 +16,13 @@ int main(){
     // Calculamos la longitud manualmente
     for(i = 0; texto[i] != '\0'; i++){
         longitud++;
-        printf("%s",longitud);
+        printf("%c",longitud);
     }
     // Mostramos la cadena invertida
     printf("Texto invertido: ");
     for(i = longitud - 1; i >= 0; i--){
-        printf("%s",longitud);
-        printf("%s", texto[i]);
+        printf("%c",longitud);
+        printf("%c", texto[i]);
     }
     printf("\n");
     return 0;
