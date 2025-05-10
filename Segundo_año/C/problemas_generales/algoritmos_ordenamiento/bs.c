@@ -39,3 +39,7 @@ void cambiar_posicion(int *n, int *b){
 }
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 00aeb4a48ab7dc26caede5d9156d184ec33ae310
