@@ -1,6 +1,7 @@
 //By Diego Saldaña
 // Decimal a Binario
 // Tiempo: 20 minutos
+// Nivel Facil
 #include <stdio.h>
 int main(){
     int numero_decimal=156;

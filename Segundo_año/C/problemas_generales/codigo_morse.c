@@ -78,11 +78,10 @@ int main(){
         }        if(palabra[i]=='w'){
                     morse=a;
         }        if(palabra[i]=='x'){
-                    morse=a;
+                  
         }        if(palabra[i]=='y'){
-                    morse=a;
+
         }        if(palabra[i]=='z'){
-                    morse=a;
 
     }
 }
