@@ -1,3 +1,4 @@
+//Codigo por Diego Saldaña
 
 /*debe entrar los datos del poligono regular y salir el reultado del area
 la formula seria multiplicar lado del poligono por todos sus lados teniendo el perimetro
