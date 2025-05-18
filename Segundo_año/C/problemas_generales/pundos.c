@@ -11,7 +11,7 @@ int main(){
 }
 */
 
-
+/*
 int jugar(int* n){
     int y = *n;
     y = (y +2)/2 +2 -(3 *y);
@@ -25,7 +25,7 @@ int  main(){
     printf("%d\n",x);
     return 0;
 }
-
+*/
 
 /*
 int main(){
@@ -37,7 +37,7 @@ int main(){
 }
 */
 
-/*
+
 int main(){
     int a,b,c,*p1,*p2;
     p1 = &a;
@@ -52,5 +52,5 @@ int main(){
 
     return 0;
 }
-*/
+
 
