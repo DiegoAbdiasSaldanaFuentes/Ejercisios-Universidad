@@ -4,7 +4,7 @@
  *   entregar el resultado en otro archivon de texto                     *
  *   Metodo de ordenamiento: Bubble Sort                                 *
  *   Fecha: 18/05/2025                                                   *
- *                                                                       *
+ *   Complejidad: Cuadratica                                             *
  *                                                                       *
  *                                                                       *
  *                                                                       *
