@@ -1,3 +1,7 @@
+/********************************************
+ * Codigo: Factorial recursivo
+ * Hecho: ChatGPT
+ ********************************************/
 #include <stdio.h>
 
 // Función recursiva
@@ -6,6 +10,7 @@ int factorial(int n) {
         return 1; // Caso base
     } else {
         return n * factorial(n - 1); // Paso recursivo
+        
     }
 }
 
