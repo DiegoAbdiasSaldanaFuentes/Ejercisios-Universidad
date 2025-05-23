@@ -1,11 +1,13 @@
 /********************************************
  * Codigo: Factorial recursivo
- * Hecho: ChatGPT
+ * Hecho: formula de internet
  ********************************************/
 #include <stdio.h>
-
+int i=0;
 // Función recursiva
 int factorial(int n) {
+    i++;
+    printf("%d\n",i);
     if (n == 0 || n == 1) {
         return 1; // Caso base
     } else {
@@ -15,7 +17,7 @@ int factorial(int n) {
 }
 
 int main() {
-    int numero = 5;
+    int numero = -1;
     int resultado = factorial(numero);
     printf("El factorial de %d es %d\n", numero, resultado);
     return 0;

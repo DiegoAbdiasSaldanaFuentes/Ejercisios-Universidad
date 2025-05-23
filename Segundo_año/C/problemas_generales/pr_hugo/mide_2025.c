@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<sys/time.h>
-#define MAXIMO 200000
+#define MAXIMO 500000
 
 void lee_datos(int array[], int N);
 void muestra_datos(int array[], int N);
@@ -25,7 +25,7 @@ int main(){
         // Bloque a medir el tiempo  
         t_1 = clock(); 
 
-        //burbuja(array, cont);
+        burbuja(array, cont);
         //insercion(array, cont);
         //shellsort(array, cont);
         //quickSort(array, 0, cont-1);

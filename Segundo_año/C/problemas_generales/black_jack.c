@@ -20,7 +20,7 @@
 
 int main(){
     srand(time(NULL)); //iniciamos la semilla con la hora actual
-    int numeros[] = rand() %21 + 1;
+    int numeros = rand() %21 + 1;
     int jugador1= numero1;
     printf("%d\n",numero1);
     int jugador2=numero2; 
