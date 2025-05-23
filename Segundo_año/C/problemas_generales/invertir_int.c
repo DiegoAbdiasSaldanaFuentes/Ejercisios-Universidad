@@ -21,3 +21,6 @@ int main() {
 
     return 0;
 }
+//Por que funciona?
+/*Porque al dividir un numero con modulo 10 te dejara con el ultimo digito restante para luego dividir el "a" para
+descomponerlo si era "1234" quedara "234"*/

@@ -1,3 +1,4 @@
+//Codigo por Diego Saldaña
 #include <stdio.h>
 
 float calcular_area(int tipo, float base, float altura);
@@ -7,6 +8,7 @@ int main() {
     float base, altura;
 
     printf("Elige el polígono:\n");
+    //hay tres formas de operar estos poligonos por esto tenemos que hacer escoger
     printf("1. Triangulo\n2. Rectangulo\n3. Cuadrado\n");
     scanf("%d", &opcion);
 

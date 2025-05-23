@@ -1,12 +1,26 @@
+/*************************************************************************
+ *Programa: BlackJack o Veintiuno                                                                       
+ *Nombre: Diego Saldaña                                                                      
+ *Fecha: 22-05-2025                                                                       
+ *                                                                       *
+ *                                                                       *
+ *                                                                       *
+ *                                                                       *
+ *                                                                       *
+ *                                                                       *
+ *                                                                       *
+ *                                                                       *
+ *                                                                       *
+ *************************************************************************/
+
+
 #include <stdio.h>
 #include <stdlib.h>  //random
 #include <time.h>   //tiempo
 
 int main(){
     srand(time(NULL)); //iniciamos la semilla con la hora actual
-    int numero1 = rand() %21 + 1;
-    int numero2 = rand() %21 + 1;
-    int numero3 = rand() %21 + 1;
+    int numeros[] = rand() %21 + 1;
     int jugador1= numero1;
     printf("%d\n",numero1);
     int jugador2=numero2; 

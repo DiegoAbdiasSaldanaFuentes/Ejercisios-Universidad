@@ -1,5 +1,5 @@
 #include <stdio.h>
-
+//complejidad cuadratica
 /*la matrices son array multidimensionales, esto permite más que un array lineal*/
 int main(){
     /*creamos una matriz 5x5 osea cinco columnas cinco filas*/

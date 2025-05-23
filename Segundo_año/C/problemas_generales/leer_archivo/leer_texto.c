@@ -13,6 +13,7 @@ int main() {
 
     char linea[100]; // Buffer para almacenar líneas
 
+    //fgets tomara lo que haya en el texto para mostrar en cambio no guardara en caso de trabajar con esto
     while (fgets(linea, sizeof(linea), archivo)) {// la condicion es que mientras no entrege NULL osea que no haya nada seguira con el while
         printf("%s", linea); // Imprimir cada línea
     }
