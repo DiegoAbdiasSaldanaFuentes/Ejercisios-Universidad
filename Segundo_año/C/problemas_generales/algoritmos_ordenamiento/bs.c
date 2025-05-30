@@ -16,7 +16,7 @@ int main(){
 }
 
 void comparar(int array[]){
-    /*declaramos estaticamente hasta donde llega pero debemos restar 1 para que no salga de los limites y nos arroje error
+    /*declaramos estaticamente hasta donde llegar pero debemos restar -1 para que no salga de los limites y nos arroje error
     para evitar esto podemo implementar otra funcion que  lea  la cantidad de datos que hay en el array*/
     for(int i=0;i<5 -1;i++){
         //si va a hacer asi de estatico usamos 5-1 para no pasarnos de los limites y restamos el indice i para no dar la vuelta entera

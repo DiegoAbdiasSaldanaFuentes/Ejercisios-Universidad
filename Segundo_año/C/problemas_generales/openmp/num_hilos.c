@@ -6,7 +6,7 @@ si el programa tarda mucho en ejecutarse puede beneficiarse con multiples nucleo
 #include <omp.h>
 #include <stdio.h>
 int main (){
-    int num_threads = 6; // Por ejemplo, configurar 6 hilos
+    int num_threads = 9; // Por ejemplo, configurar 6 hilos
     omp_set_num_threads(num_threads);//Quiero usar 6 hilos cuando entre en una región paralela
 
     #pragma omp parallel//“A partir de aquí, ejecuta este bloque con múltiples hilos.”,  realiza el bucle  con cada hilo
