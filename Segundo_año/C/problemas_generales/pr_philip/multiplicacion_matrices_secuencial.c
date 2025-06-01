@@ -46,8 +46,6 @@ int main() {
             num++;
         }
     }
-
-
     for (int i = 0; i < TAM; i++) {
         for (int j = 0; j < TAM; j++) {
             for (int k = 0; k < TAM; k++) {

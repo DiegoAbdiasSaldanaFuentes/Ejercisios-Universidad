@@ -38,10 +38,10 @@ int main (){
     for (int i = 0; i < TAM; i++) {
         num_array1[i] = i;
     }
-    int num_threads = 20; // Por ejemplo, configurar 20 hilos
-    omp_set_num_threads(num_threads);//Quiero usar 20 hilos cuando entre en una región paralela
+    int num_threads = 20; 
+    omp_set_num_threads(num_threads);
 
-    #pragma omp parallel for//“A partir de aquí, ejecuta este bloque con múltiples hilos.”,  realiza el bucle  con cada hilo
+    #pragma omp parallel for
     for(int j = 0; j < TAM; j++){
         resultado_guardado[j] = j + num_array1[j]; 
     }
