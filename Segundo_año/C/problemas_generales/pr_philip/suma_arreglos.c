@@ -51,7 +51,7 @@ int main(){
     double tiempo_omp = fin_omp - inicio_omp;
     QueryPerformanceCounter(&fin_win);
     double tiempo_win = (double)(fin_win.QuadPart - inicio_win.QuadPart) / frec_win.QuadPart;
-
+    printf("\n");
     printf("Ejecutando version secuencial de la suma de arreglos\n");
     printf("Cantidad de datos a calcular:%d\n",TAM);
     printf("Tiempo de CPU: %.4f segundos\n", tiempo_cpu);
@@ -61,6 +61,8 @@ int main(){
     free(arr);
     free(resultado_guardado);
     free(num_array1);
+    printf("\n");
+
 
     return 0;
 }

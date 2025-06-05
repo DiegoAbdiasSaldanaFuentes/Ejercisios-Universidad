@@ -3,12 +3,7 @@
  *  Descripcion del algoritmo: identificar si un numero es armstrong, que este al ser separado y elevarlo por la cantidad
  *  del tamaño del numero
  *  Autor: Diego Saldaña
- *  Fecha: 31-05-2025                                                                      
- *                                                                       
- *                                                                       
- *                                                                       
- *                                                                                                                                          
- *                                                                       
+ *  Fecha: 31-05-2025                                                                                                                                         
  *************************************************************************/
 #include <stdio.h>
 

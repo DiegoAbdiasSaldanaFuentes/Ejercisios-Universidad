@@ -74,6 +74,8 @@ int main (){
     free(arr);
     free(resultado_guardado);
     free(num_array1);
+    printf("\n");
+
 
     return 0;
 }

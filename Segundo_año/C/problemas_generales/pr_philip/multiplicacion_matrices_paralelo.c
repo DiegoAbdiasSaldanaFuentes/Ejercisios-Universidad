@@ -15,7 +15,7 @@
 #include <windows.h>
 #include <stdlib.h>
 
-#define TAM 100 //advertencia no llegar al millon
+#define TAM 100 //advertencia no llegar a 1000
 
 int main() {
     // Inicializar temporizadores
@@ -76,8 +76,9 @@ int main() {
     double tiempo_omp = fin_omp - inicio_omp;
     QueryPerformanceCounter(&fin_win);
     double tiempo_win = (double)(fin_win.QuadPart - inicio_win.QuadPart) / frec_win.QuadPart;
-
+    printf("\n");
     // Mostrar tiempos
+    printf("Version paralela de la multiplicacion de matrizes\n");
     printf("fila y columna %dx%d\n", TAM, TAM);
     printf("cantidad de hilos usados:%d\n",num_threads);
     printf("tiempo de CPU: %.4f segundos\n", tiempo_cpu);
@@ -93,6 +94,7 @@ int main() {
     free(matris1);
     free(matris2);
     free(resultado);
+    printf("\n");
 
     return 0;
 }

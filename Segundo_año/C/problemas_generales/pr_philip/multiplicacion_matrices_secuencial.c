@@ -71,11 +71,12 @@ int main() {
     double tiempo_omp = fin_omp - inicio_omp;
     QueryPerformanceCounter(&fin_win);
     double tiempo_win = (double)(fin_win.QuadPart - inicio_win.QuadPart) / frec_win.QuadPart;
-
+    printf("\n");
     // Mostrar tiempos
+    printf("Version secuencial de la multiplicacion de matrices\n");
     printf("fila y columna %dx%d\n", TAM, TAM);
     printf("tiempo de CPU: %.4f segundos\n", tiempo_cpu);
-    printf("tiempo real/OMP: %.4f segundos\n", tiempo_omp);
+    printf("tiempo real/OMP con un hilo predeterminado: %.4f segundos\n", tiempo_omp);
     printf("tiempo con QueryPerformanceCounter: %.4f segundos\n", tiempo_win);
 
     // Liberar memoria
@@ -87,6 +88,8 @@ int main() {
     free(matris1);
     free(matris2);
     free(resultado);
+    printf("\n");
+
 
     return 0;
 }
