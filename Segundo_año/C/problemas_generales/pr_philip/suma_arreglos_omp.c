@@ -52,7 +52,7 @@ int main (){
         fprintf(salida, "%d\n", (int)resultado_guardado[j]); 
     }   
     fclose(salida);
-
+    printf("\n");
     //Fin del tiempo CPU
     printf("Ejecutando version usando multiples hilos de la computadora\n");
     printf("Cantidad de datos a calcular:%d\n",TAM);

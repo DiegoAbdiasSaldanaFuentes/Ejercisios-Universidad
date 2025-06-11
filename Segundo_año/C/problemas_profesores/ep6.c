@@ -8,5 +8,5 @@ int main(){
     c=x;
     printf("%d...%c\t",x,c);
     }
-    return(0);
+    return 0;
 }

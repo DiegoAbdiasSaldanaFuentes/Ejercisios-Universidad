@@ -16,8 +16,6 @@ int main(){
         mult = num_div * num_div * num_div;
         resultado= resultado + mult;
         num /= 10;
-
-        
     }
 
     printf("%d",resultado);
