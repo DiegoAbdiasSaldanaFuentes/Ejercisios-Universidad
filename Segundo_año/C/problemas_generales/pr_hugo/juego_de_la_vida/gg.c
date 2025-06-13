@@ -43,10 +43,10 @@ int main(){
             for(int j = 0; j < n[1]; j++){
                 int suma = 0;
 
-                // revisar los 8 vecinos sin usar continue
+                // revisar los 8 vecinos 
                 for(int dx = -1; dx <= 1; dx++){
                     for(int dy = -1; dy <= 1; dy++){
-                        if(dx != 0 || dy != 0){ // solo si no es la celda actual
+                        if(dx != 0 || dy != 0){ 
                             int ni = i + dx;
                             int nj = j + dy;
                             if(ni >= 0 && ni < n[0] && nj >= 0 && nj < n[1]){
