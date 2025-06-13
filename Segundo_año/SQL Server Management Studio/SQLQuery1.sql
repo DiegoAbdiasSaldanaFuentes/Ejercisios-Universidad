@@ -1,6 +1,5 @@
 -- Esta es mi primera base de dato
--- by Diego Saldaña
-
+-- by Diego Saldania
 CREATE DATABASE MinuevaBD; -- Crea la base de datos
 
 USE MinuevaBD; -- Activa la DB para trabajar con ella
