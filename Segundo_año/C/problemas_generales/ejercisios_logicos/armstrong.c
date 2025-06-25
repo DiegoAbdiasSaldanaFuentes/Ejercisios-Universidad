@@ -9,6 +9,7 @@
 
 int main(){
     int num=371;
+    int num_verificar=num;
     int mult;
     int resultado=0;
     while(num>0){
@@ -17,8 +18,14 @@ int main(){
         resultado= resultado + mult;
         num /= 10;
     }
+    printf("resultado: %d\n",resultado);
+    printf("numero a verificar: %d\n",num_verificar);
+    if(num_verificar==resultado){
+        printf("tu numero es narciso");
+    }else{
+        printf("tu numero no es narciso");
+    }
 
-    printf("%d",resultado);
 
 return 0;
 }

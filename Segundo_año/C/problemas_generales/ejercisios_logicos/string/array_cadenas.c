@@ -13,7 +13,7 @@ int error(int num_err) {
     if (num_err < 0 || num_err >= max_err) {
         printf("Error desconocido: código %d fuera de rango.\n", num_err);
     } else {
-        printf("Error número %d: %s.\n", num_err, errores[num_err]);
+        printf("Error numero %d: %s.\n", num_err, errores[num_err]);
     }
     exit(-1);
 }
