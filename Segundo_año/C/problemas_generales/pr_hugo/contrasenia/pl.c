@@ -43,16 +43,13 @@ int verificacion(char palabra[], FILE *salida) {
     for (i = 1; palabra[i] != '\0'; i++) {
         char a = palabra[i - 1];
         char b = palabra[i];
-
         int a_es_vocal = (a == 'a' || a == 'e' || a == 'i' || a == 'o' || a == 'u');
         int b_es_vocal = (b == 'a' || b == 'e' || b == 'i' || b == 'o' || b == 'u');
-
         if ((a_es_vocal && b_es_vocal) || (!a_es_vocal && !b_es_vocal)) {
             intercalado_mal = 1;
         }
     }
 
-    // Revisa repeticiones inválidas
     for (i = 1; palabra[i] != '\0'; i++) {
         if (palabra[i] == palabra[i - 1]) {
             if (palabra[i] != 'a' && palabra[i] != 'i') {
@@ -60,7 +57,6 @@ int verificacion(char palabra[], FILE *salida) {
             }
         }
     }
-
     if (tiene_oclusiva == 1 && intercalado_mal == 0 && repeticion_mal == 0) {
         fprintf(salida, "<%s> es aceptable\n", palabra);
     } else {

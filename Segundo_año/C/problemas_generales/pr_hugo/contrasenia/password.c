@@ -1,40 +1,31 @@
-/*************************************************************************
- *  Autores: Diego Saldaña y Victor Farias
- *  Docente: Hugito Arayita
- *  Asignatura: Estructura de datos
- *  Referencias bibliograficas: 'Programación en C de Byron Gottfried' y 'Brian W. Kernighan Dennis M. Ritchie'.
- *                                                                                                                                          
- *                                                                      
- *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
- *************************************************************************/
-
+/************************************************************************************************************************** 
+ *  Autores: Diego Saldaña y Victor Farias                                                                                *
+ *  Docente: Hugo Araya                                                                                              *
+ *  Asignatura: Estructura de datos                                                                                       *
+ *  Referencias bibliograficas: 'Programación en C de Byron Gottfried' y 'Brian W. Kernighan Dennis M. Ritchie'.          *
+ *                                                                                                                        *                  
+ *                                                                                                                        *
+ *                                                                                                                        *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+ *************************************************************************************************************************/
 #include <stdio.h>
 #include <string.h>
 
-// FUNCIONES AUXILIARES
 int tiene_consonante_oclusiva(char palabra[]);
-
 int cumple_intercalado(char palabra[]);
-
 int tiene_repeticion_invalida(char palabra[]);
-
 int es_vocal(char letra);
-
 int es_consonante(char letra);
 
 int main(){
     FILE *ent, *sal;
-    char palabra[32];
+    char palabra[100];
     ent = fopen("claves.txt", "r");
     sal = fopen("revisadas.txt", "w");
 
     while(fgets(palabra, sizeof(palabra), ent)) {
-        palabra[strcspn(palabra, "\n")] = '\0';  // Elimina el salto de línea
-
+        palabra[strcspn(palabra, "\n")] = '\0';  
         if(strcmp(palabra, "end") == 0)
-            break;
-
-        // Verificamos las tres reglas
+            break; 
         if(tiene_consonante_oclusiva(palabra) && cumple_intercalado(palabra) &&!tiene_repeticion_invalida(palabra)){
             fprintf(sal,"<%s> es aceptable\n", palabra);
         } 
@@ -42,7 +33,6 @@ int main(){
             fprintf(sal, "<%s> no es aceptable\n", palabra);
         }
     }
-
     fclose(ent);
     fclose(sal);
     return 0;
@@ -83,7 +73,6 @@ int tiene_repeticion_invalida(char palabra[]) {
 int es_vocal(char letra) {
     return (letra == 'a' || letra == 'e' || letra == 'i' || letra == 'o' || letra == 'u');
 }
-
 int es_consonante(char letra) {
     return (letra >= 'a' && letra <= 'z') && !es_vocal(letra);
 }
