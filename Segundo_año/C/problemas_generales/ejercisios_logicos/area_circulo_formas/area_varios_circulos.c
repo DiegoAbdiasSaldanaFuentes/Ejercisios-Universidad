@@ -6,7 +6,7 @@ float procesar(float radio);
 int main(){
     float radio, area;
     int cont, n;
-    printf("N° de circulos?: ");
+    printf("N de circulos?: ");
     scanf("%d", &n);
 
     for(cont = 1 ;cont <=n;++cont){

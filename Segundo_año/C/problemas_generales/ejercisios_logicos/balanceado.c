@@ -9,7 +9,6 @@
  * - Expresión no balanceada: { a * ( c + d ) ] - 5 }
  */
 
-//solucion de google
 #include <stdio.h>
 
 #define MAX 100 //a directiva de preprocesador que sirve para definir un nombre simbólico
