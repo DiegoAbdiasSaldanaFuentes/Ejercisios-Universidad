@@ -18,8 +18,9 @@ int main(){
         resultado= resultado + mult;
         num /= 10;
     }
-    printf("resultado: %d\n",resultado);
+    
     printf("numero a verificar: %d\n",num_verificar);
+    printf("resultado: %d\n",resultado);
     if(num_verificar==resultado){
         printf("tu numero es narciso");
     }else{

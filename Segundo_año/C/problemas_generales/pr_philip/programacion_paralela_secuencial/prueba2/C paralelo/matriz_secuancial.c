@@ -4,20 +4,21 @@
  * -Nombre del proyecto: Multiplicación de matrices
  * -Problema planteado: Implementar un programa en C utilizando OpenMP 
  * que realice la multiplicacion de 2 matrices cuadradas grandes
- * -Fecha comienzo: 25-05-2025
- * -Fecha Finalización: 26-05-2025                                                   
- *                                                                                                                                         *
+ * -Fecha comienzo: 06-07-2025
+ * -Fecha Finalización: 07-07-2025                                                   
+ *                                                                                                                                         
  *************************************************************************/
 
 #include <omp.h>
 #include <time.h>
-#include <stdio.h>
 #include <windows.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #define TAM 5000
 
 int main() {
+
     // Inicializar temporizadores
     LARGE_INTEGER inicio_win, fin_win, frec_win;
     QueryPerformanceFrequency(&frec_win); 
@@ -25,8 +26,6 @@ int main() {
     double inicio_omp = omp_get_wtime();
     clock_t inicio_cpu = clock();
 
-    int num_threads = 20;
-    omp_set_num_threads(num_threads);
 
     // Declarar matrices
     int** matris1 = (int**)malloc(TAM * sizeof(int*));
@@ -48,9 +47,6 @@ int main() {
             num++;
         }
     }
-
-    // Multiplicación paralela
-    #pragma omp parallel for collapse(2)
     for (int i = 0; i < TAM; i++) {
         for (int j = 0; j < TAM; j++) {
             for (int k = 0; k < TAM; k++) {
@@ -60,7 +56,7 @@ int main() {
     }
 
     // Guardar resultado
-    FILE* salida = fopen("resultado_multiplicacion.txt", "w");
+    FILE* salida = fopen("resultado_multiplicacion_secuencial.txt", "w");
     for (int i = 0; i < TAM; i++) {
         for (int j = 0; j < TAM; j++) {
             fprintf(salida, "%d ", resultado[i][j]);
@@ -78,12 +74,12 @@ int main() {
     double tiempo_win = (double)(fin_win.QuadPart - inicio_win.QuadPart) / frec_win.QuadPart;
     printf("\n");
     // Mostrar tiempos
-    printf("Version paralela de la multiplicacion de matrizes\n");
+    printf("Version secuencial de la multiplicacion de matrices\n");
     printf("fila y columna %dx%d\n", TAM, TAM);
-    printf("cantidad de hilos usados:%d\n",num_threads);
     printf("tiempo de CPU: %.4f segundos\n", tiempo_cpu);
-    printf("tiempo real/OMP: %.4f segundos\n", tiempo_omp);
+    printf("tiempo real/OMP con un hilo predeterminado: %.4f segundos\n", tiempo_omp);
     printf("tiempo con QueryPerformanceCounter: %.4f segundos\n", tiempo_win);
+    
 
     // Liberar memoria
     for (int i = 0; i < TAM; i++) {
@@ -95,6 +91,7 @@ int main() {
     free(matris2);
     free(resultado);
     printf("\n");
+
 
     return 0;
 }

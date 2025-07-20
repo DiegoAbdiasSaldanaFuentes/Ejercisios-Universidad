@@ -1,15 +1,19 @@
-/*
- * Autor: Diego Saldaña
- * Proyecto: Multiplicación de matrices en Java con ExecutorService
- * Equivalente al código en C con OpenMP
- */
-
+/*************************************************************************
+ * -Nombre autor: Diego Saldaña
+ *- Nombre docente: Francisco Philip Vásquez Iglesias
+ * -Nombre del proyecto: Multiplicación de matrices
+ * -Problema planteado: Implementar un programa en Java utilizando paralelismo 
+ * que realice la multiplicacion de 2 matrices cuadradas grandes
+ * -Fecha comienzo: 06-07-2025
+ * -Fecha Finalización: 07-07-2025                                                   
+ *                                                                                                                                         *
+ *************************************************************************/
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.concurrent.*;
 
 public class MatrizParalela {
-    static final int TAM = 100;
+    static final int TAM = 5000;
     static final int NUM_THREADS = 20;
 
     static int[][] matris1 = new int[TAM][TAM];

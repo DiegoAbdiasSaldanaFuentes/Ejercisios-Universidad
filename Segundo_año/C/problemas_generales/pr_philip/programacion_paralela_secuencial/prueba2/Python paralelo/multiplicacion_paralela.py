@@ -8,7 +8,7 @@ import time
 import multiprocessing
 
 # Parámetros
-TAM = 100
+TAM = 5000
 NUM_PROCESOS = 20
 
 # Generar las matrices de entrada

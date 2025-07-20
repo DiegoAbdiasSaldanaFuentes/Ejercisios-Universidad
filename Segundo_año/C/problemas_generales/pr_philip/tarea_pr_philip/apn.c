@@ -37,11 +37,11 @@ int numeros_primos(){
         }
     }
     printf("---------------------------------------------------------------------------------\n");
+
+
 }
 
 int numeros_narcisos(){
-    int modulo= 750 % 10;
-    printf("%d\n",modulo);
     for(int i = 1; i < generar;){
         int num= rand() % MAX;
         int num_verificar=num;
