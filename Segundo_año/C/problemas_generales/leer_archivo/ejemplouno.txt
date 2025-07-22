@@ -1,2 +1,0 @@
-Hola, este es un archivo de prueba.
-Linea dos del archivo.

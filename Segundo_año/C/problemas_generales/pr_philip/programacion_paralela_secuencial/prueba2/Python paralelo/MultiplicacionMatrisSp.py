@@ -1,7 +1,7 @@
 import time
 
 # Tamaño de las matrices
-TAM = 500
+TAM = 5000
 
 # Inicializar matrices
 matris1 = [[0 for _ in range(TAM)] for _ in range(TAM)]
