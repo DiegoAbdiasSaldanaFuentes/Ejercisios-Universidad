@@ -1,0 +1,15 @@
+C:\Users\jugad\Documents\Github\Ejercisios-Universidad\Segundo_año\Segundo_semestre\C#\app\bin\Debug\net8.0\app.exe
+C:\Users\jugad\Documents\Github\Ejercisios-Universidad\Segundo_año\Segundo_semestre\C#\app\bin\Debug\net8.0\app.deps.json
+C:\Users\jugad\Documents\Github\Ejercisios-Universidad\Segundo_año\Segundo_semestre\C#\app\bin\Debug\net8.0\app.runtimeconfig.json
+C:\Users\jugad\Documents\Github\Ejercisios-Universidad\Segundo_año\Segundo_semestre\C#\app\bin\Debug\net8.0\app.dll
+C:\Users\jugad\Documents\Github\Ejercisios-Universidad\Segundo_año\Segundo_semestre\C#\app\bin\Debug\net8.0\app.pdb
+C:\Users\jugad\Documents\Github\Ejercisios-Universidad\Segundo_año\Segundo_semestre\C#\app\obj\Debug\net8.0\app.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\jugad\Documents\Github\Ejercisios-Universidad\Segundo_año\Segundo_semestre\C#\app\obj\Debug\net8.0\app.AssemblyInfoInputs.cache
+C:\Users\jugad\Documents\Github\Ejercisios-Universidad\Segundo_año\Segundo_semestre\C#\app\obj\Debug\net8.0\app.AssemblyInfo.cs
+C:\Users\jugad\Documents\Github\Ejercisios-Universidad\Segundo_año\Segundo_semestre\C#\app\obj\Debug\net8.0\app.csproj.CoreCompileInputs.cache
+C:\Users\jugad\Documents\Github\Ejercisios-Universidad\Segundo_año\Segundo_semestre\C#\app\obj\Debug\net8.0\app.sourcelink.json
+C:\Users\jugad\Documents\Github\Ejercisios-Universidad\Segundo_año\Segundo_semestre\C#\app\obj\Debug\net8.0\app.dll
+C:\Users\jugad\Documents\Github\Ejercisios-Universidad\Segundo_año\Segundo_semestre\C#\app\obj\Debug\net8.0\refint\app.dll
+C:\Users\jugad\Documents\Github\Ejercisios-Universidad\Segundo_año\Segundo_semestre\C#\app\obj\Debug\net8.0\app.pdb
+C:\Users\jugad\Documents\Github\Ejercisios-Universidad\Segundo_año\Segundo_semestre\C#\app\obj\Debug\net8.0\app.genruntimeconfig.cache
+C:\Users\jugad\Documents\Github\Ejercisios-Universidad\Segundo_año\Segundo_semestre\C#\app\obj\Debug\net8.0\ref\app.dll
