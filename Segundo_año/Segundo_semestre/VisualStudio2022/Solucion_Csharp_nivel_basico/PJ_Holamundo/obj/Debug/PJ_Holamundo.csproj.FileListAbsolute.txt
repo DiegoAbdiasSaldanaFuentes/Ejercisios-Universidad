@@ -1,0 +1,8 @@
+C:\Users\jugad\Documents\Github\Ejercisios-Universidad\Segundo_año\Segundo_semestre\VisualStudio2022\Solucion_Csharp_nivel_basico\PJ_Holamundo\bin\Debug\PJ_Holamundo.exe.config
+C:\Users\jugad\Documents\Github\Ejercisios-Universidad\Segundo_año\Segundo_semestre\VisualStudio2022\Solucion_Csharp_nivel_basico\PJ_Holamundo\bin\Debug\PJ_Holamundo.exe
+C:\Users\jugad\Documents\Github\Ejercisios-Universidad\Segundo_año\Segundo_semestre\VisualStudio2022\Solucion_Csharp_nivel_basico\PJ_Holamundo\bin\Debug\PJ_Holamundo.pdb
+C:\Users\jugad\Documents\Github\Ejercisios-Universidad\Segundo_año\Segundo_semestre\VisualStudio2022\Solucion_Csharp_nivel_basico\PJ_Holamundo\obj\Debug\PJ_Holamundo.csproj.AssemblyReference.cache
+C:\Users\jugad\Documents\Github\Ejercisios-Universidad\Segundo_año\Segundo_semestre\VisualStudio2022\Solucion_Csharp_nivel_basico\PJ_Holamundo\obj\Debug\PJ_Holamundo.csproj.CoreCompileInputs.cache
+C:\Users\jugad\Documents\Github\Ejercisios-Universidad\Segundo_año\Segundo_semestre\VisualStudio2022\Solucion_Csharp_nivel_basico\PJ_Holamundo\obj\Debug\PJ_Holamundo.exe
+C:\Users\jugad\Documents\Github\Ejercisios-Universidad\Segundo_año\Segundo_semestre\VisualStudio2022\Solucion_Csharp_nivel_basico\PJ_Holamundo\obj\Debug\PJ_Holamundo.pdb
+C:\Users\jugad\Documents\Github\Ejercisios-Universidad\Segundo_año\Segundo_semestre\VisualStudio2022\Solucion_Csharp_nivel_basico\PJ_Holamundo\obj\Debug\PJ_Holamundo.exe.config
