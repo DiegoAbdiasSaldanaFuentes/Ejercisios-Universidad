@@ -1,0 +1,7 @@
+Hoy 09/08/2025, sera el dia 1 de 30 dias seguidos programando ejercisios logico del libro: "Ejercisios en C++" o  los del profesor Philip
+
+¿Como deben ser los ejercisio?
+
+- Los ejercisios deben ser retadores y que estimulen la mente, la IA no esta permitida, no importa que pase.
+- Los ejercisios deben ser documentados y citar las paginas usadas.
+
