@@ -28,12 +28,12 @@ class Banco{
         saldo += depo;
     }
 
-    void retirar(float reti){
+    bool retirar(float reti){
 
         if(saldo-reti <0){
-            cout<<"saldo insuficiente"<<endl;
+            return true;
         }else{
-            saldo -= reti;
+            return false;
         }
 
     }
@@ -48,8 +48,12 @@ int main(){
     cout<<"El saldo de Luis es :"<<cuenta_papa.getSaldo()<<endl;
     cuenta_papa.depositar(1000);
     cout<<"se realizo un deposito de 1000, saldo total:"<<cuenta_papa.getSaldo()<<endl;
-    cuenta_papa.retirar(1100);
-    cout<<"se hizo un retiro de 1500 el saldo total es de: "<<cuenta_papa.getSaldo()<<endl;
+    if(cuenta_papa.retirar(1100)){
+        cout<<"saldo insuficiente"<<endl;
+    }else{
+        cout<<"Se realizo un retiro"<<endl;
+    }
+    
 
 
     Banco cuenta_mama;
