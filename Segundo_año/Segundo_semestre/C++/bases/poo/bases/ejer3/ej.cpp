@@ -7,72 +7,74 @@ public:
     string nombre_es;
     int matricula;
     float promedio;
-    Estudiante(string n, int ma, float pro) : nombre(n), matricula(ma), promedio(pro){}
+    Estudiante(){
+        nombre_es = "Sin nombre";
+        matricula = 0;
+        promedio = 0.0;
+    }
+    Estudiante(string n, int ma, float pro) : nombre_es(n), matricula(ma), promedio(pro){}
 
     
 };
 
 class Profesores{
 public:
-    string nombre;
+    string nombre_pr;
     int numero_empleado;
     string especialidad;
-    Profesores(string nom, int num_emp, string esp) : nombre(nom), numero_empleado(num_emp), especialidad(esp){}
+    Profesores(){
+        nombre_pr = "Sin nombre";
+        numero_empleado = 0;
+        especialidad = "Ninguna";
+    }
+    Profesores(string nom, int num_emp, string esp) : nombre_pr(nom), numero_empleado(num_emp), especialidad(esp){}
 
 };
 
 
 
-class Cursos{
+class Cursos{ // Un curso tiene  un profesor y varios estudiantes. Enfasis en los "tiene" lo que lleva a hacer composición
 public:
-    string nombre;
+
+    string nombre_curso;
     int codigo;
-    vector<Estudiante*> inscritos;
-    Cursos(string nom, int cod) : nombre(nom), codigo(cod){}
+    Profesores profesor; // composicion
+    vector<Estudiante*> inscritos; // agregacion
+    Cursos(string nom, int cod, Profesores p)
+        : nombre_curso(nom), codigo(cod), profesor(p) {}
+
 
     void inscribir(Estudiante* e){
         inscritos.push_back(e);
     }
     void mostrarInscritos(){
-        cout << "Estudiante "<<     << " tiene  inscritos: \n";
+        cout << "Curso "<<  nombre_curso << " tiene  inscritos: \n";
         for(auto e : inscritos){
-            cout << "-" << e -> nombre<< endl;
+            cout << "-" << e -> nombre_es<< endl;
         }
     }
 };
 
-/* 
-class Taller{
-public:
-    string tema;
-    vector<Estudiante*> inscritos;
 
-    Taller(string t) :  tema(t){}
+int main() {
+    // Crear profesor
+    Profesores prof1("Juan Morales", 1001, "Matemáticas");
 
-    void inscribir(Estudiante* e){
-        inscritos.push_back(e);
-    }
+    // Crear estudiantes
+    Estudiante e1("Hugo", 1, 2.0);
+    Estudiante e2("Carla", 2, 3.5);
+    Estudiante e3("Luis", 3, 4.2);
 
-    void mostrarInscritos(){
-        cout << "Taller de "<< tema<< " tiene  inscritos: \n";
-        for(auto e : inscritos){
-            cout << "-" << e -> nombre<< endl;
-        }
-    }
-};
-*/
+    // Crear curso y asignar profesor
+    Cursos curso1("Algebra", 101, prof1);
 
-int main(){
-    Estudiante e1 ("Hugo"), e2("Carlitos"), e3("Philip");
+    // Inscribir estudiantes
+    curso1.inscribir(&e1);
+    curso1.inscribir(&e2);
+    curso1.inscribir(&e3);
 
-    Taller robotica("ROBOTICA");
-    Taller ia("Inteligencia Artificial");
+    // Mostrar los inscritos
+    curso1.mostrarInscritos();
 
-    robotica.inscribir(&e1);
-    robotica.inscribir(&e2);
-    ia.inscribir(&e2);
-    ia.inscribir(&e3);
-
-    robotica.mostrarInscritos();
-    ia.mostrarInscritos();
+    return 0;
 }
