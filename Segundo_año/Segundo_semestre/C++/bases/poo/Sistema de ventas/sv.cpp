@@ -15,7 +15,7 @@ public:
         numero_cliente = 0;
     }
 
-    Cliente(string nom, string dir, int num_c): nombre(nom), direccion(direccion), numero_cliente(num_c) {}
+    Cliente(string nom, string dir, int num_c): nombre(nom), direccion(dir), numero_cliente(num_c) {}
 };
 
 class Producto{
@@ -34,8 +34,11 @@ class Producto{
 
 
 class Factura{ //agregacion
+private:
+    Cliente* cliente;
     vector<Cliente*> boleta;
 
+public:
     void agregar(Cliente* e){
         boleta.push_back(e);
     }

@@ -47,7 +47,7 @@ public:
 
 class TareaPractica: public Tarea, public Evaluable{
 public:
-
+    void mostrarInfo() override
 };
 
 class Lectura : public Tarea, public NoEvaluable{
