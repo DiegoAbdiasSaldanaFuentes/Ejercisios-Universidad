@@ -1,0 +1,1 @@
+console.log(`la mitad de 100 es ${100 / 2}`)

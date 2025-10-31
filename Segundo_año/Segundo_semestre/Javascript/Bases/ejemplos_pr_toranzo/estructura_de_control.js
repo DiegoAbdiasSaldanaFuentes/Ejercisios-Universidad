@@ -1,10 +1,10 @@
 // programa que define los tipos de variables en Javascript
-
+//=======CAMELCASE==============
 /*
 Carrera de IngenierÃ­a InformÃ¡tica 
 Curso de IngenierÃ­a de software II
 */
-
+/*
 
 // = == = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
 console.clear()
@@ -48,6 +48,42 @@ else{
 console.log(resultado, color)
 console.log("\n\n")
 
+*/
+
+/*
+let origen = 1 + Math.round(Math.random()*4);
+let destino = 1 +Math.round(Math.random()*4);
+valorMinuto = 100;
+let duracion = 1 + Math.round(Math.random()*9);
+let valor = 0;
+if(origen == destino){
+  valor = 100;
+}
+else if(origen == 1){
+  valor = 1000;
+}
+else if(origen == 2){
+  valor = 2000;
+}
+else if(origen == 3){
+  valor =  3000;
+}
+else if(origen == 4){
+  valor = 4000;
+}
+else if(origen == 5){
+  valor = 5000
+}
+
+
+
+Hora [1 a 8] =10% es de madrugada
+Hora [8 , 16] = 15% buen dia
+Hora [16 ,24] = 20% buenas noches
+
+
+console.log("registro de llamada", origen, " ",destino," ", duracion," ", valor, " ");
+*/
 
 /*
 console.clear()
@@ -73,29 +109,29 @@ mensaje = (edad >= 18) ? "Es mayor de edad" : "Es menor de edad";
 console.log("La determinaciÃ³n es : ", mensaje); 
 console.log("\n")
 
+*/
 
+/*
 console.log("\n 3. ==== Aletorio para saber si es hombre o mujer")
 let sexo  =  Math.round(Math.random());
 let mensajeSexo = (sexo == 1) ? "Hombre" : "Mujer";
 console.log("El sexo es : ", mensajeSexo); 
+
 console.log("\n")
+*/
 
-
-
+/*
 
 console.log("\n 4. ==== Aletorio para determinar el estado de un clima: Caluroso(>30), Agradable(>=15) o FrÃ­o")
 let temperatura = Math.round(Math.random()*40);
 console.log("\n La temperatura generada: ", temperatura)
-let estado = (temperatura > 30) 
-              ? "Caluroso" 
-              : (temperatura >= 15) 
-                ? "Agradable" 
-                : "FrÃ­o";
+let estado = (temperatura > 30) ? "Caluroso" : (temperatura >= 15) ? "Agradable" : "FrÃ­o";
 console.log(estado); 
 console.log("\n")
 
+*/
 
-
+/*
 
 
 
@@ -139,8 +175,9 @@ switch(numeroSwitch){
     default: console.log("Valor no encontrado!!")
 }
 
+*/
 
-
+/*
 
 console.log("\n")
 console.log("2. Ejemplo  de switch manipulando intervalos de numeros")
@@ -163,6 +200,9 @@ switch (true) {
     console.log("Puntaje fuera de rango");
 }
 
+*/
+
+/*
 
 
 console.log("\n")
@@ -207,7 +247,7 @@ switch (true) {
   default:
     console.log("Deficiente");
 }
-
+*/
 
 console.clear()
 console.log("\n")
@@ -221,9 +261,16 @@ console.log("Parte 4: q, r, s, 4) t, u, v, w, x, y, z")
 let letraIngresada= "a"
 console.log("LA soluciÃ³n aplica solamente todo lo visto hasta el momento. La persona ingresarÃ¡ una letra y su soluciÃ³n deberÃ¡ indicar el nÃºmero de la parte donde estÃ¡ la localizada la letra")    
 
+switch (true) {
+  case letraIngresada.charAt(0):
+    console.log("si esta ahi");
+    break;
 
+  default:
+    break;
+}
 
-
+/*
 //Ejempo 1
 console.clear()
 console.log("\n\n\n")
