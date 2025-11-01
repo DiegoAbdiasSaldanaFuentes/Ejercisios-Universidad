@@ -19,11 +19,9 @@ private:
     string correo;
 public:
     Persona():nombre("Sin nombre"), rut ("Sin rut"), correo("Sin correo"){}
-    Persona(string n, string r, string c) : nombre(n), rut(r), correo(c){
-        cout<<"persona creada\n"<<endl;
-    }
+    Persona(string n, string r, string c) : nombre(n), rut(r), correo(c){}
 
-    string getNombre() const { return nombre; }
+    string getNombre() const { return nombre;}
 
     virtual void mostrar() const = 0;
     virtual ~Persona(){}
@@ -31,16 +29,20 @@ public:
 
 class Estudiantes : public Persona{ 
 public:
-    vector<Asignatura*> inscritos;
     Estudiantes() : Persona(){}
-    Estudiantes(string n, string r, string c) :Persona(n,r,c){
-        cout<<"persona creada\n"<<endl;
-    }
+    Estudiantes(string n, string r, string c) :Persona(n,r,c){}
     void mostrar() const override {
         cout << "Estudiante: " << getNombre() << endl;
     }
 };
 
+class Profesores : public Persona{ 
+public:
+    Profesores(string n, string r, string c) : Persona(n,r,c){}
+    void mostrar() const override {
+        cout << "Profesor: " << getNombre() << endl;
+    }
+};
 
 class Asignatura{ // estudiantes y asignatura es n:m
 private:
@@ -51,14 +53,8 @@ private:
 public:
     Asignatura(): nombreAsignaturas("Sin asignatura"),codigo(0),cupos(0){}
     Asignatura(int c, string asig, int cup) : codigo(c), nombreAsignaturas(asig), cupos(cup){}
-    // profesor a cargo mediante asociacion
-    // buscar codigo de asignacion y agregacion
-    Profesores* profesor;// asosiacion
     vector<Estudiantes*> inscritos;
-
-    void setProfesor(Profesores * p){
-        profesor = p;
-    }
+    vector<Profesores*> profesor;
 
     void inscribir(Estudiantes* e){
         if(inscritos.size() >= cupos){
@@ -71,15 +67,24 @@ public:
                 return;
             }
         }
-
         inscritos.push_back(e);
         cout << e-> getNombre()<<" inscrito correctamente en "<<nombreAsignaturas<<endl;
     }
 
+    void inscribir2(Profesores* p){
+        profesor.push_back(p);
+        cout<< p->getNombre()<<" imparte correctamente en "<<nombreAsignaturas<<endl;
+    }
     void mostrarInscritos(){
-        cout<<"assad de"<< nombreAsignaturas<<"tiene inscritos:\n";
+        cout<<nombreAsignaturas<<"tiene inscritos:\n";
         for(auto e : inscritos){
             cout<<"- "<<e->getNombre()<<endl;
+        }
+    }
+    void mostrarProfesor(){
+        cout<<nombreAsignaturas<<"tiene al profesor:\n";
+        for(auto p : profesor){
+            cout<<"- "<<p->getNombre()<<endl;
         }
     }
 
@@ -87,19 +92,7 @@ public:
     
 };
 
-class Profesores : public Persona{ // Profesor con una clase posiblemente llamada curso es 1:1
-public:
-    string profesores;
-    
-    Profesores(){
-        profesores = "Sin nombre";
-    }
 
-    Profesores(string pr) : profesores(pr){}
-    void imparte(){
-        
-    }
-};
 
 class  Carrera{
 private:
@@ -129,7 +122,7 @@ class Mostrar_info{
 public:
 
 
-};
+}; 
 
 
 int main(){
@@ -138,10 +131,22 @@ int main(){
     Asignatura bdd(221, "Bases de Datos", 2);
     // Crear estudiantes
     Estudiantes e1("Diego Saldana", "22.036.610-3", "diego@ucm.cl");
+    // Crear profesor
+    Profesores p1("Philip Vasquez","18.888.888-0","philip@bknucm.cl");
+    // Mostrar estudiantes y profesores
+    cout<<e1.getNombre()<<endl;
+    cout<<p1.getNombre()<<endl;
     // Probar inscripcion
+
+    
     poo.inscribir(&e1);
     cout << "\n--- Lista de inscritos ---\n";
     poo.mostrarInscritos();
+
+    poo.inscribir2(&p1);
+    cout<<"\n--Lista profesores impartiendo--\n";
+    poo.mostrarProfesor();
+
     return 0;
 
 
