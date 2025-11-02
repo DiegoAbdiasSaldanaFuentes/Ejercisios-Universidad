@@ -97,14 +97,10 @@ public:
 class  Carrera{
 private:
     Asignatura asigna;//composiones
-
-public:
     string carrera;
+public:
 
-    Carrera(){
-        carrera = "Sin carrera";
-    }
-
+    Carrera(): carrera("Sin carrera"){}
     Carrera(string car, Asignatura a) :  carrera(car), asigna(a){}
     
 };
@@ -113,8 +109,11 @@ public:
 
 
 class Notas{
+private:
+    int notas;
 public:
-
+    Notas(): notas(0){}
+    Notas(int n): notas(n){}
 
 };
 
@@ -136,9 +135,9 @@ int main(){
     // Mostrar estudiantes y profesores
     cout<<e1.getNombre()<<endl;
     cout<<p1.getNombre()<<endl;
-    // Probar inscripcion
-
     
+    
+    // Probar inscripcion
     poo.inscribir(&e1);
     cout << "\n--- Lista de inscritos ---\n";
     poo.mostrarInscritos();
