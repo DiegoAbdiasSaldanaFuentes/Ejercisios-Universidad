@@ -2,11 +2,8 @@
 Consigna:
 Recibe un nombre de ciudad ("Talca", "Santiago", "Chillán", "Antofagasta") y muestra el nombre de la región a la que pertenece.
 Si la ciudad no está registrada, muestra "Ciudad no encontrada".
-
 Herramientas:
-
 switch
-
 default */
 
 let ciudad = "Talca";

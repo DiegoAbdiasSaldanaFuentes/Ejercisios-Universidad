@@ -8,7 +8,5 @@ for(let i= 1; i<=sucursales;i++){
     let ventas=30+Math.round(Math.random()*40);
     let string = "#";
     resultado = string.repeat(ventas);
-
-
     console.log("Sucursal-",i,resultado,ventas);
 };
