@@ -1,5 +1,12 @@
 
 
 void main(){
-    System.out.println("Hola");
+    int nota = 6;
+
+    if(nota <4){
+        System.out.println("reprobate loco");
+    }
+    else{
+        System.out.println("Aprobao");
+    }
 }
