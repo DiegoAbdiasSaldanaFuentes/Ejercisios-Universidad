@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>VentanaMenu</class>
- <widget class="QMainWindow" name="VentanaMenu">
+ <class>ventanaoperacion</class>
+ <widget class="QMainWindow" name="ventanaoperacion">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -14,72 +14,82 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="lblUsuario">
+   <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>270</x>
-      <y>40</y>
-      <width>241</width>
+      <x>230</x>
+      <y>20</y>
+      <width>311</width>
       <height>41</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>16</pointsize>
+      <pointsize>20</pointsize>
      </font>
     </property>
     <property name="text">
-     <string>Bienvenido Usuario</string>
+     <string>Realizar Transferencia</string>
     </property>
    </widget>
-   <widget class="QLabel" name="lblSaldo">
+   <widget class="QLineEdit" name="txtDestino">
     <property name="geometry">
      <rect>
-      <x>280</x>
-      <y>80</y>
-      <width>191</width>
-      <height>91</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>28</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>$500.000</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btnLogout">
-    <property name="geometry">
-     <rect>
-      <x>490</x>
-      <y>280</y>
-      <width>93</width>
-      <height>29</height>
+      <x>330</x>
+      <y>110</y>
+      <width>113</width>
+      <height>28</height>
      </rect>
     </property>
     <property name="text">
-     <string>Volver</string>
+     <string/>
+    </property>
+    <property name="placeholderText">
+     <string>Rut Destino</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="btnHistorial">
+   <widget class="QLineEdit" name="txtMonto">
     <property name="geometry">
      <rect>
-      <x>350</x>
-      <y>280</y>
-      <width>93</width>
-      <height>29</height>
+      <x>330</x>
+      <y>180</y>
+      <width>113</width>
+      <height>28</height>
      </rect>
     </property>
-    <property name="text">
-     <string>Historial</string>
+    <property name="placeholderText">
+     <string>Monto</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="btnTransferir">
+   <widget class="QComboBox" name="cmbBanco">
     <property name="geometry">
      <rect>
-      <x>200</x>
+      <x>340</x>
+      <y>230</y>
+      <width>82</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>Banco Estado</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Santander</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Falabella</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QPushButton" name="btnAccion">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
       <y>280</y>
       <width>93</width>
       <height>29</height>
@@ -87,6 +97,19 @@
     </property>
     <property name="text">
      <string>Transferir</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnVolver">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>310</y>
+      <width>93</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Volver</string>
     </property>
    </widget>
   </widget>

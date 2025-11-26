@@ -14,138 +14,120 @@
    <string>LoginWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: #FF6600; /* Naranja */</string>
+   <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QFrame" name="frame">
+   <widget class="QLabel" name="IblRut">
     <property name="geometry">
      <rect>
-      <x>310</x>
-      <y>30</y>
-      <width>521</width>
-      <height>431</height>
+      <x>490</x>
+      <y>120</y>
+      <width>101</width>
+      <height>20</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: white; border-radius: 10px;</string>
+     <string notr="true"/>
     </property>
-    <property name="frameShape">
-     <enum>QFrame::Shape::StyledPanel</enum>
+    <property name="text">
+     <string>Ingrese su rut:</string>
     </property>
-    <property name="frameShadow">
-     <enum>QFrame::Shadow::Raised</enum>
+   </widget>
+   <widget class="QLineEdit" name="txtRut">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>150</y>
+      <width>113</width>
+      <height>28</height>
+     </rect>
     </property>
-    <widget class="QLabel" name="label">
-     <property name="geometry">
-      <rect>
-       <x>220</x>
-       <y>20</y>
-       <width>91</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(0, 0, 0)</string>
-     </property>
-     <property name="text">
-      <string>Banca en Linea</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="IblRut">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>130</y>
-       <width>101</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: white;  /* Fondo blanco de la tarjeta */
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(107, 115, 115)</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="placeholderText">
+     <string>ingrese su rut</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblClave">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>200</y>
+      <width>151</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string>Ingrese su contraseña:</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnIngresar">
+    <property name="geometry">
+     <rect>
+      <x>490</x>
+      <y>310</y>
+      <width>93</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: white;  /* Fondo blanco de la tarjeta */
 color: black;             /* Texto negro */
 border-radius: 10px;      /* Bordes redondeados */</string>
-     </property>
-     <property name="text">
-      <string>Ingrese su rut:</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="txtRut">
-     <property name="geometry">
-      <rect>
-       <x>140</x>
-       <y>120</y>
-       <width>113</width>
-       <height>28</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(107, 115, 115)</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="placeholderText">
-      <string>ingrese su rut</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="lblClave">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>240</y>
-       <width>151</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: white;  /* Fondo blanco de la tarjeta */
-color: black;             /* Texto negro */
-border-radius: 10px;      /* Bordes redondeados */</string>
-     </property>
-     <property name="text">
-      <string>Ingrese su contraseña:</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="txtClave">
-     <property name="geometry">
-      <rect>
-       <x>170</x>
-       <y>240</y>
-       <width>113</width>
-       <height>28</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(107, 115, 115)</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="echoMode">
-      <enum>QLineEdit::EchoMode::Password</enum>
-     </property>
-     <property name="placeholderText">
-      <string>contraseña</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="btnIngresar">
-     <property name="geometry">
-      <rect>
-       <x>50</x>
-       <y>300</y>
-       <width>93</width>
-       <height>29</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: white;  /* Fondo blanco de la tarjeta */
-color: black;             /* Texto negro */
-border-radius: 10px;      /* Bordes redondeados */</string>
-     </property>
-     <property name="text">
-      <string>Ingresar</string>
-     </property>
-    </widget>
+    </property>
+    <property name="text">
+     <string>Ingresar</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="txtClave">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>240</y>
+      <width>113</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(107, 115, 115)</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="echoMode">
+     <enum>QLineEdit::EchoMode::Password</enum>
+    </property>
+    <property name="placeholderText">
+     <string>contraseña</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>40</y>
+      <width>221</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string>Banca en Linea</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
