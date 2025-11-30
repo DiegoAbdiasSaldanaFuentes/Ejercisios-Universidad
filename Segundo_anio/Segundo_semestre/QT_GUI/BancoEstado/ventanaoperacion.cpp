@@ -1,10 +1,10 @@
 #include "ventanaoperacion.h"
 #include "ui_ventanaoperacion.h"
-#include "ventanamenu.h" // Volver al menu de transeferencia
+#include "ventanamenu.h"
 #include "cliente.h"
 #include <QMessageBox>
 #include <stdexcept>
-#include <QIntValidator> // <--- Necesario para bloquear letras
+#include <QIntValidator>
 
 ventanaoperacion::ventanaoperacion(QWidget *parent)
     : QMainWindow(parent)
@@ -34,7 +34,7 @@ void ventanaoperacion::on_btnVolver_clicked()// Boton volver
 void ventanaoperacion::on_btnAccion_clicked()
 {
     try {
-        // 1. Capturar datos
+        // Capturar datos
         QString textoMonto = ui->txtMonto->text();
         QString textoDestino = ui->txtDestino->text();
 
@@ -43,27 +43,27 @@ void ventanaoperacion::on_btnAccion_clicked()
             throw std::invalid_argument("Faltan datos. Rellene todo.");
         }
 
-        // 2. CONVERSIÓN SEGURA (Sin Regex)
+        // CONVERSIÓN SEGURA
         bool esNumero;
         int monto = textoMonto.toInt(&esNumero); // &esNumero se vuelve FALSE si hay letras
 
-        // Aquí atrapamos "hola", "hol0@", "10a", "###", etc.
+        // Aquí atrapamos "hola", "hol0@", "10a", "###".
         if (esNumero == false) {
             throw std::invalid_argument("El monto no es válido (contiene letras o símbolos).");
         }
 
-        // 3. Validaciones Lógicas
+        //  Validaciones Lógicas
         if (monto <= 0) {
             throw std::domain_error("El monto debe ser mayor a cero.");
         }
 
-        // 4. Validación de Saldo
+        //  Validación de Saldo
         int saldoActual = Cliente::getSaldo();
         if (monto > saldoActual) {
             throw std::runtime_error("Saldo insuficiente.");
         }
 
-        // --- ÉXITO ---
+
         Cliente::disminuirSaldo(monto);
         QString bancoSeleccionado = ui->cmbBanco->currentText();
         Cliente::agregarMovimiento(textoDestino, bancoSeleccionado, monto);

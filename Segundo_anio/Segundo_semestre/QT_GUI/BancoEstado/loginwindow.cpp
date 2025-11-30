@@ -20,8 +20,8 @@ void LoginWindow::on_btnIngresar_clicked()
         QString rut = ui->txtRut->text().trimmed(); // trimmed quita espacios de los lados
         QString clave = ui->txtClave->text().trimmed();
 
-        // 1. VALIDACIÓN RUT (EXCEPCIÓN DE FORMATO)
-        // La regla dice: "Varios números" + "-" + "Un número o la letra k/K"
+        // 1. VALIDACIÓN RUT
+        // "Varios números" + "-" + "Un número o la letra k/K"
         QRegularExpression regexRut("^[0-9]+-[0-9kK]$");
         QRegularExpressionMatch match = regexRut.match(rut);
 
@@ -30,7 +30,7 @@ void LoginWindow::on_btnIngresar_clicked()
             throw std::invalid_argument("El RUT debe tener formato: 12345678-9 (con guion).");
         }
 
-        // 2. Validación de Credenciales (Simulada)
+        // 2. Validación de Credenciales
         // Fíjate que ahora comparamos strings limpios
         if (rut == "22036610-3" && clave == "123") {
             QMessageBox::information(this, "Éxito", "¡Bienvenido!", QMessageBox::Ok);

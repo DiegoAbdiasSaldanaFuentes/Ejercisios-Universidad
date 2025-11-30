@@ -3,7 +3,7 @@
 
 #include <QString>
 #include <QList>
-#include "persona.h" // NUEVO: Importamos al padre
+#include "persona.h"
 
 struct Movimiento {
     QString rut;
@@ -11,7 +11,7 @@ struct Movimiento {
     int monto;
 };
 
-// NUEVO: Heredamos de Persona
+
 class Cliente : public Persona
 {
 private:
@@ -22,11 +22,11 @@ private:
 public:
     Cliente();
 
-    // NUEVO: Debemos implementar la función del padre
-    // Al ser static el resto, esta debe ser normal para cumplir con la herencia
+
+
     QString getIdentificacion() override;
 
-    // ... (Tus otros métodos estáticos siguen igual abajo) ...
+
     static int getSaldo();
     static QString getNombre();
     static void disminuirSaldo(int monto);
@@ -38,4 +38,4 @@ public:
     void operator+=(int monto);
 };
 
-#endif // CLIENTE_H
+#endif

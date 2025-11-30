@@ -24,4 +24,4 @@ private:
     Ui::ventanaoperacion *ui;
 };
 
-#endif // VENTANAOPERACION_H
+#endif

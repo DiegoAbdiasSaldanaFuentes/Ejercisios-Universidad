@@ -53,24 +53,24 @@ void VentanaMenu::on_btnTransferir_clicked(){// Boton de transferir
 
 void VentanaMenu::on_btnHistorial_clicked()
 {
-    // 1. Crear la instancia de la ventana
+    //  Crear la instancia de la ventana
     VentanaHistorial historial(this); // 'this' significa que depende del menú
 
-    // 2. Hacerla MODAL (Bloquea la ventana de atrás hasta que cierres esta)
+    //  Hacerla MODAL (Bloquea la ventana de atrás hasta que cierre)
     historial.setModal(true);
 
-    // 3. Ejecutarla
+    //  Ejecutarla
     historial.exec();
 }
 
 void VentanaMenu::on_btnDepositarTest_clicked()
 {
-    // 1. Instanciamos un cliente (necesario para usar operadores)
+    //  Instanciamos un cliente  para usar operadores
     Cliente miCliente;
 
-    // 2. USAMOS LA SOBRECARGA (Aquí está el punto del examen)
-    // En vez de llamar a una función, sumamos directamente al objeto
-    miCliente += 10000;
+    // USAMOS LA SOBRECARGA
+
+    miCliente += 10000;//modificable
 
     // 3. Actualizamos la etiqueta visual
     ui->lblSaldo->setText("$ " + QString::number(Cliente::getSaldo()));
@@ -80,10 +80,10 @@ void VentanaMenu::on_btnDepositarTest_clicked()
 
 void VentanaMenu::showEvent(QShowEvent *event)
 {
-    // 1. Llamamos a la función original (para que se dibuje la ventana)
+    //  Llamamos a la función original
     QMainWindow::showEvent(event);
 
-    // 2. AQUI ACTUALIZAMOS EL SALDO AUTOMÁTICAMENTE
+    //  AQUI ACTUALIZAMOS EL SALDO AUTOMÁTICAMENTE
     int saldoActualizado = Cliente::getSaldo();
     ui->lblSaldo->setText("$ " + QString::number(saldoActualizado));
 }

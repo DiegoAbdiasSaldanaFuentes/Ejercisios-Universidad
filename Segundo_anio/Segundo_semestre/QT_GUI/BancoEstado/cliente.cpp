@@ -1,15 +1,15 @@
 #include "cliente.h"
 
-// 1. INICIALIZACIÓN DE VARIABLES ESTÁTICAS (¡Esto es lo que te falta!)
+//  INICIALIZACIÓN DE VARIABLES ESTÁTICAS  BORRAR EN UN FUTURO
 QList<Movimiento> Cliente::listaMovimientos;
 int Cliente::saldoCuenta = 500000;
 QString Cliente::nombreUsuario = "Usuario Prueba";
 
-// 2. CONSTRUCTOR
+// CONSTRUCTOR
 Cliente::Cliente() {
 }
 
-// 3. IMPLEMENTACIÓN DE MÉTODOS
+// IMPLEMENTACIÓN DE MÉTODOS
 
 int Cliente::getSaldo() {
     return saldoCuenta;
@@ -31,7 +31,7 @@ void Cliente::setNombre(QString nombre) {
     nombreUsuario = nombre;
 }
 
-// 4. MÉTODOS DE HISTORIAL
+// MÉTODOS DE HISTORIAL
 
 void Cliente::agregarMovimiento(QString rut, QString banco, int monto) {
     Movimiento nuevo;

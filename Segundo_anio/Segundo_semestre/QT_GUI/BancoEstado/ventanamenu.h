@@ -32,4 +32,4 @@ private:
     Ui::VentanaMenu *ui;
 };
 
-#endif // VENTANAMENU_H
+#endif
