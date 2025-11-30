@@ -3,12 +3,16 @@
 #include "ventanamenu.h" // Volver al menu de transeferencia
 #include "cliente.h"
 #include <QMessageBox>
+#include <stdexcept>
+#include <QIntValidator> // <--- Necesario para bloquear letras
 
 ventanaoperacion::ventanaoperacion(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::ventanaoperacion)
 {
     ui->setupUi(this);
+    ui->txtMonto->setValidator(new QIntValidator(0, 99999999, this));
+
 }
 
 ventanaoperacion::~ventanaoperacion()
@@ -29,35 +33,47 @@ void ventanaoperacion::on_btnVolver_clicked()// Boton volver
 
 void ventanaoperacion::on_btnAccion_clicked()
 {
-    // Llamamos el contenido que tendra txtMonto
-    QString textoMonto = ui->txtMonto->text();
+    try {
+        // 1. Capturar datos
+        QString textoMonto = ui->txtMonto->text();
+        QString textoDestino = ui->txtDestino->text();
 
-    // Transformamos  a INT
-    int monto = textoMonto.toInt();
+        // Validación de vacíos
+        if(textoMonto.isEmpty() || textoDestino.isEmpty()) {
+            throw std::invalid_argument("Faltan datos. Rellene todo.");
+        }
 
-    // Preguntar cuánta plata hay
-    int saldoActual = Cliente::getSaldo();
+        // 2. CONVERSIÓN SEGURA (Sin Regex)
+        bool esNumero;
+        int monto = textoMonto.toInt(&esNumero); // &esNumero se vuelve FALSE si hay letras
 
-    if (monto > saldoActual) {
-        QMessageBox::critical(this, "Saldo Insuficiente", "No tienes fondos.");
-        return;
+        // Aquí atrapamos "hola", "hol0@", "10a", "###", etc.
+        if (esNumero == false) {
+            throw std::invalid_argument("El monto no es válido (contiene letras o símbolos).");
+        }
+
+        // 3. Validaciones Lógicas
+        if (monto <= 0) {
+            throw std::domain_error("El monto debe ser mayor a cero.");
+        }
+
+        // 4. Validación de Saldo
+        int saldoActual = Cliente::getSaldo();
+        if (monto > saldoActual) {
+            throw std::runtime_error("Saldo insuficiente.");
+        }
+
+        // --- ÉXITO ---
+        Cliente::disminuirSaldo(monto);
+        QString bancoSeleccionado = ui->cmbBanco->currentText();
+        Cliente::agregarMovimiento(textoDestino, bancoSeleccionado, monto);
+
+        QMessageBox::information(this, "Éxito", "Transferencia realizada.");
+
+        ui->txtMonto->clear();
+        ui->txtDestino->clear();
+
+    } catch (const std::exception &e) {
+        QMessageBox::warning(this, "Error", e.what());
     }
-
-    // RESTAMOS EL DINERO
-    Cliente::disminuirSaldo(monto);
-
-    //  Mensaje de éxito
-    QMessageBox::information(this, "Éxito", "Transferencia realizada. Nuevo saldo: " + QString::number(Cliente::getSaldo()));
-
-    // ... (código de la resta de saldo) ...
-
-    // --- ESTO ES LO QUE GUARDA EL DATO EN LA LISTA ---
-    QString bancoSeleccionado = ui->cmbBanco->currentText();
-    QString rutDestino = ui->txtDestino->text();
-
-    // Llamamos al método estático que creamos en Cliente
-    Cliente::agregarMovimiento(rutDestino, bancoSeleccionado, monto);
-    // -------------------------------------------------
-
 }
-

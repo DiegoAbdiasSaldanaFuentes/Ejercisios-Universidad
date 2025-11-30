@@ -51,3 +51,14 @@ void Cliente::eliminarMovimiento(int indice) {
         listaMovimientos.removeAt(indice);
     }
 }
+
+// Implementación de la sobrecarga
+void Cliente::operator+=(int monto) {
+    // Reutilizamos nuestro método estático
+    Cliente::aumentarSaldo(monto);
+}
+
+// Implementación del método obligatorio de Persona
+QString Cliente::getIdentificacion() {
+    return "Cliente: " + nombreUsuario;
+}

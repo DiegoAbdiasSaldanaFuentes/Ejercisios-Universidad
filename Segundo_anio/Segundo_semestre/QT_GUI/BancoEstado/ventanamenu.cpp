@@ -4,6 +4,8 @@
 #include "ventanaoperacion.h"
 #include "cliente.h"
 #include "ventanahistorial.h"
+#include <QMessageBox>
+#include <QShowEvent>
 
 VentanaMenu::VentanaMenu(QWidget *parent)
     : QMainWindow(parent)
@@ -59,4 +61,29 @@ void VentanaMenu::on_btnHistorial_clicked()
 
     // 3. Ejecutarla
     historial.exec();
+}
+
+void VentanaMenu::on_btnDepositarTest_clicked()
+{
+    // 1. Instanciamos un cliente (necesario para usar operadores)
+    Cliente miCliente;
+
+    // 2. USAMOS LA SOBRECARGA (Aquí está el punto del examen)
+    // En vez de llamar a una función, sumamos directamente al objeto
+    miCliente += 10000;
+
+    // 3. Actualizamos la etiqueta visual
+    ui->lblSaldo->setText("$ " + QString::number(Cliente::getSaldo()));
+
+    QMessageBox::information(this, "Regalo", "Se han abonado $10.000 usando sobrecarga de operadores.");
+}
+
+void VentanaMenu::showEvent(QShowEvent *event)
+{
+    // 1. Llamamos a la función original (para que se dibuje la ventana)
+    QMainWindow::showEvent(event);
+
+    // 2. AQUI ACTUALIZAMOS EL SALDO AUTOMÁTICAMENTE
+    int saldoActualizado = Cliente::getSaldo();
+    ui->lblSaldo->setText("$ " + QString::number(saldoActualizado));
 }

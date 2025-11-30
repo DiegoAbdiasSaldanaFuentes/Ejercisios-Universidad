@@ -13,19 +13,23 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>230</x>
-      <y>20</y>
+      <x>240</x>
+      <y>30</y>
       <width>311</width>
       <height>41</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>20</pointsize>
+      <pointsize>18</pointsize>
+      <bold>true</bold>
      </font>
     </property>
     <property name="text">
@@ -64,9 +68,9 @@
    <widget class="QComboBox" name="cmbBanco">
     <property name="geometry">
      <rect>
-      <x>340</x>
+      <x>330</x>
       <y>230</y>
-      <width>82</width>
+      <width>121</width>
       <height>28</height>
      </rect>
     </property>
@@ -92,8 +96,17 @@
       <x>340</x>
       <y>280</y>
       <width>93</width>
-      <height>29</height>
+      <height>31</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    background-color: #FF6600; /* Naranja Banco */
+    color: white;              /* Letra Blanca */
+    border: 1px solid #CC4400;
+    padding: 8px;
+    border-radius: 4px;
+}</string>
     </property>
     <property name="text">
      <string>Transferir</string>

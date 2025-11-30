@@ -10,19 +10,28 @@ VentanaHistorial::VentanaHistorial(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    // 1. CONFIGURACIÓN VISUAL DE LA TABLA
-    // Le decimos que tendrá 3 columnas
+    // 1. Configuración de Columnas
     ui->tblHistorial->setColumnCount(3);
-
-    // Ponemos los títulos
     QStringList titulos;
     titulos << "RUT Destino" << "Banco" << "Monto";
     ui->tblHistorial->setHorizontalHeaderLabels(titulos);
-
-    // Hacemos que se estiren para ocupar todo el ancho
     ui->tblHistorial->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
-    // 2. CARGAR LOS DATOS INMEDIATAMENTE
+    // --- AGREGA ESTAS LÍNEAS DE SEGURIDAD ---
+
+    // A. Bloquear edición: Nadie puede escribir en las celdas
+    ui->tblHistorial->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+    // B. Selección de fila completa: Se ve más profesional (Opcional pero recomendado)
+    // Al hacer clic, se selecciona toda la fila azul, no solo una celda
+    ui->tblHistorial->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+    // C. Selección única: Solo puedes borrar de a uno (Evita errores de lógica)
+    ui->tblHistorial->setSelectionMode(QAbstractItemView::SingleSelection);
+
+    // ----------------------------------------
+
+    // 2. Cargar datos
     cargarDatos();
 }
 
@@ -50,13 +59,33 @@ void VentanaHistorial::cargarDatos()
     }
 }
 
-void VentanaHistorial::on_btnEliminar_clicked(){
-    // Ver qué fila seleccionó el usuario
-    int fila = ui->tblHistorial->currentRow();
+void VentanaHistorial::on_btnEliminar_clicked()
+{
+    // 1. Obtener la fila seleccionada visualmente
+    // currentRow() devuelve el número de fila (0, 1, 2...) o -1 si no hay nada seleccionado.
+    int filaSeleccionada = ui->tblHistorial->currentRow();
 
-    if (fila < 0) {
-        QMessageBox::warning(this, "Aviso", "Seleccione una fila para borrar.");
-        return;
+    // 2. Validación de Usuario (UX)
+    if (filaSeleccionada == -1) {
+        QMessageBox::warning(this, "Atención", "Por favor, selecciona una fila para eliminar.");
+        return; // Detenemos la función aquí
     }
 
-}  // Borrar de la memoria y actualizar la tabla
+    // 3. Confirmación (Buenas prácticas de interfaz)
+    // Es peligroso borrar sin preguntar. Esto suma puntos de diseño.
+    QMessageBox::StandardButton respuesta;
+    respuesta = QMessageBox::question(this, "Confirmar",
+                                      "¿Estás seguro de que deseas eliminar este registro?",
+                                      QMessageBox::Yes | QMessageBox::No);
+
+    if (respuesta == QMessageBox::Yes) {
+
+        // 4. Borrar del Backend (Memoria / Futura Base de Datos)
+        Cliente::eliminarMovimiento(filaSeleccionada);
+
+        // 5. Refrescar la tabla (Para que desaparezca visualmente)
+        cargarDatos();
+
+        QMessageBox::information(this, "Éxito", "Registro eliminado correctamente.");
+    }
+}

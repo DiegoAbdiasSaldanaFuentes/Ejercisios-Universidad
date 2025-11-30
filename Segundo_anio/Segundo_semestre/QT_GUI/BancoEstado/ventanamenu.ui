@@ -6,19 +6,22 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>792</width>
     <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="lblUsuario">
     <property name="geometry">
      <rect>
-      <x>270</x>
-      <y>40</y>
+      <x>290</x>
+      <y>80</y>
       <width>241</width>
       <height>41</height>
      </rect>
@@ -36,14 +39,16 @@
     <property name="geometry">
      <rect>
       <x>280</x>
-      <y>80</y>
-      <width>191</width>
+      <y>130</y>
+      <width>241</width>
       <height>91</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <family>Tahoma</family>
       <pointsize>28</pointsize>
+      <bold>true</bold>
      </font>
     </property>
     <property name="text">
@@ -53,11 +58,20 @@
    <widget class="QPushButton" name="btnLogout">
     <property name="geometry">
      <rect>
-      <x>490</x>
-      <y>280</y>
+      <x>600</x>
+      <y>290</y>
       <width>93</width>
-      <height>29</height>
+      <height>31</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    background-color: #FF6600; /* Naranja Banco */
+    color: white;              /* Letra Blanca */
+    border: 1px solid #CC4400;
+    padding: 8px;
+    border-radius: 4px;
+}</string>
     </property>
     <property name="text">
      <string>Volver</string>
@@ -66,11 +80,20 @@
    <widget class="QPushButton" name="btnHistorial">
     <property name="geometry">
      <rect>
-      <x>350</x>
-      <y>280</y>
+      <x>440</x>
+      <y>290</y>
       <width>93</width>
-      <height>29</height>
+      <height>31</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    background-color: #FF6600; /* Naranja Banco */
+    color: white;              /* Letra Blanca */
+    border: 1px solid #CC4400;
+    padding: 8px;
+    border-radius: 4px;
+}</string>
     </property>
     <property name="text">
      <string>Historial</string>
@@ -79,14 +102,61 @@
    <widget class="QPushButton" name="btnTransferir">
     <property name="geometry">
      <rect>
-      <x>200</x>
-      <y>280</y>
+      <x>150</x>
+      <y>290</y>
       <width>93</width>
-      <height>29</height>
+      <height>31</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    background-color: #FF6600; /* Naranja Banco */
+    color: white;              /* Letra Blanca */
+    border: 1px solid #CC4400;
+    padding: 8px;
+    border-radius: 4px;
+}</string>
     </property>
     <property name="text">
      <string>Transferir</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnDepositarTest">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>290</y>
+      <width>90</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    background-color: #FF6600; /* Naranja Banco */
+    color: white;              /* Letra Blanca */
+    border: 1px solid #CC4400;
+    padding: 8px;
+    border-radius: 4px;
+}</string>
+    </property>
+    <property name="text">
+     <string>Depositar</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>-1</y>
+      <width>831</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: #FF6600;</string>
+    </property>
+    <property name="text">
+     <string/>
     </property>
    </widget>
   </widget>
@@ -95,7 +165,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>792</width>
      <height>25</height>
     </rect>
    </property>
