@@ -220,6 +220,28 @@ QFrame {
      <string/>
     </property>
    </widget>
+   <widget class="QPushButton" name="btnGestion">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>450</y>
+      <width>93</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    background-color: #FF6600; /* Naranja Banco */
+    color: white;              /* Letra Blanca */
+    border: 1px solid #CC4400;
+    padding: 8px;
+    border-radius: 4px;
+}</string>
+    </property>
+    <property name="text">
+     <string>Gestion</string>
+    </property>
+   </widget>
    <zorder>decoracion3</zorder>
    <zorder>lblUsuario</zorder>
    <zorder>lblSaldo</zorder>
@@ -229,6 +251,7 @@ QFrame {
    <zorder>btnDepositarTest</zorder>
    <zorder>label</zorder>
    <zorder>decoracion2</zorder>
+   <zorder>btnGestion</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

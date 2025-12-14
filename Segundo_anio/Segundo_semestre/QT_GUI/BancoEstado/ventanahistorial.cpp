@@ -1,8 +1,6 @@
 #include "ventanahistorial.h"
 #include "ui_ventanahistorial.h"
-#include "cliente.h"
-#include <QMessageBox>
-#include <QHeaderView>
+#include <QMessageBox> // Necesario para mensajes de error
 
 VentanaHistorial::VentanaHistorial(QWidget *parent) :
     QDialog(parent),
@@ -10,28 +8,19 @@ VentanaHistorial::VentanaHistorial(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    // CONFIGURACION DE COLUMNAS
-    ui->tblHistorial->setColumnCount(3);
+    // BLINDAJE 1: Verificar que la tabla exista antes de tocarla
+    if (ui->tblHistorial == nullptr) {
+        QMessageBox::critical(this, "Error Fatal", "La tabla 'tblHistorial' no existe en el diseño .ui");
+        return;
+    }
+
+    ui->tblHistorial->setColumnCount(4);
     QStringList titulos;
-    titulos << "RUT Destino" << "Banco" << "Monto";
+    titulos << "Tipo" << "Origen" << "Destino" << "Monto";
     ui->tblHistorial->setHorizontalHeaderLabels(titulos);
+
+    // Ajuste visual
     ui->tblHistorial->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-
-    // LÍNEAS DE SEGURIDAD
-
-    // Bloquear edición: Nadie puede escribir en las celdas
-    ui->tblHistorial->setEditTriggers(QAbstractItemView::NoEditTriggers);
-
-    // Selección de fila completa
-    // Al hacer clic, se selecciona toda la fila azul, no solo una celda
-    ui->tblHistorial->setSelectionBehavior(QAbstractItemView::SelectRows);
-
-    //  Selección única: Solo puedes borrar de a uno (Evita errores de lógica)
-    ui->tblHistorial->setSelectionMode(QAbstractItemView::SingleSelection);
-
-
-    //  Cargar datos
-    cargarDatos();
 }
 
 VentanaHistorial::~VentanaHistorial()
@@ -39,52 +28,44 @@ VentanaHistorial::~VentanaHistorial()
     delete ui;
 }
 
+void VentanaHistorial::setRutUsuario(std::string rut) {
+    // BLINDAJE 2: Si el RUT llega vacío, avisar (útil para debugging)
+    if (rut.empty()) {
+        QMessageBox::warning(this, "Advertencia", "No se recibió el RUT del usuario.");
+        return;
+    }
+
+    this->rutUsuario = rut;
+    cargarDatos();
+}
 void VentanaHistorial::cargarDatos()
 {
-    // Limpiamos la tabla para empezar de cero
+    // Limpiamos la tabla primero
     ui->tblHistorial->setRowCount(0);
 
-    // Traemos la lista de la memoria
-    QList<Movimiento> lista = Cliente::getMovimientos();
+    try {
+        // "try" significa: "Intenta hacer esto, y si explota, atrápalo"
+        GestorBD gestor("banco.db");
 
-    //  Recorremos la lista y creamos las filas
-    for(int i = 0; i < lista.size(); i++) {
-        ui->tblHistorial->insertRow(i); // Crear fila vacía
+        vector<Movimiento> lista = gestor.obtenerHistorial(rutUsuario);
 
-        // Llenamos las celdas
-        ui->tblHistorial->setItem(i, 0, new QTableWidgetItem(lista[i].rut));
-        ui->tblHistorial->setItem(i, 1, new QTableWidgetItem(lista[i].banco));
-        ui->tblHistorial->setItem(i, 2, new QTableWidgetItem(QString::number(lista[i].monto)));
+        for(size_t i = 0; i < lista.size(); i++) {
+            ui->tblHistorial->insertRow(i);
+
+            // Convertimos std::string a QString de forma segura
+            ui->tblHistorial->setItem(i, 0, new QTableWidgetItem(QString::fromStdString(lista[i].tipo)));
+            ui->tblHistorial->setItem(i, 1, new QTableWidgetItem(QString::fromStdString(lista[i].rutOrigen)));
+            ui->tblHistorial->setItem(i, 2, new QTableWidgetItem(QString::fromStdString(lista[i].rutDestino)));
+            ui->tblHistorial->setItem(i, 3, new QTableWidgetItem(QString::number(lista[i].monto)));
+        }
+    }
+    catch (std::exception &e) {
+        // Si ocurre un error, NO cerramos. Mostramos mensaje.
+        QMessageBox::critical(this, "Error de Historial", "No se pudo leer la base de datos: " + QString(e.what()));
     }
 }
 
 void VentanaHistorial::on_btnEliminar_clicked()
 {
-    //  Obtener la fila seleccionada visualmente
-    // currentRow() devuelve el número de fila (0, 1, 2...) o -1 si no hay nada seleccionado.
-    int filaSeleccionada = ui->tblHistorial->currentRow();
-
-    //  Validación de Usuario (UX)
-    if (filaSeleccionada == -1) {
-        QMessageBox::warning(this, "Atención", "Por favor, selecciona una fila para eliminar.");
-        return; // Detenemos la función aquí
-    }
-
-    //  Confirmación (Buenas prácticas de interfaz)
-    // Es peligroso borrar sin preguntar. Esto suma puntos de diseño.
-    QMessageBox::StandardButton respuesta;
-    respuesta = QMessageBox::question(this, "Confirmar",
-                                      "¿Estás seguro de que deseas eliminar este registro?",
-                                      QMessageBox::Yes | QMessageBox::No);
-
-    if (respuesta == QMessageBox::Yes) {
-
-        // 4. Borrar del Backend (Memoria / Futura Base de Datos)
-        Cliente::eliminarMovimiento(filaSeleccionada);
-
-        // 5. Refrescar la tabla (Para que desaparezca visualmente)
-        cargarDatos();
-
-        QMessageBox::information(this, "Éxito", "Registro eliminado correctamente.");
-    }
+    // Botón sin acción por seguridad
 }

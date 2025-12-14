@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(BancoEstado VERSION 0.1 LANGUAGES CXX)
+# 1. Definir el proyecto y los lenguajes (C y C++)
+project(BancoEstado VERSION 0.1 LANGUAGES C CXX)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -14,23 +15,37 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
 
 set(TS_FILES BancoEstado_es_CL.ts)
 
-# --- AQUÍ ESTÁ LA LISTA MAESTRA DE TUS ARCHIVOS ---
+# 2. IMPORTANTE: Decirle a CMake dónde buscar los archivos .h de la base de datos
+include_directories(backend)
+
+# 3. LA LISTA MAESTRA DE ARCHIVOS (Todo debe estar aquí, una sola vez)
 set(PROJECT_SOURCES
+        # Archivos Principales
         main.cpp
         loginwindow.cpp loginwindow.h loginwindow.ui
         ventanamenu.cpp ventanamenu.h ventanamenu.ui
         ventanaoperacion.cpp ventanaoperacion.h ventanaoperacion.ui
         ventanahistorial.cpp ventanahistorial.h ventanahistorial.ui
         cliente.cpp cliente.h
+        persona.cpp persona.h
+
+        # Recursos
+        recursos.qrc
         ${TS_FILES}
+
+        # Backend (Base de Datos)
+        backend/GestorBD.h
+        backend/GestorBD.cpp
+        backend/sqlite3.h
+        backend/sqlite3.c
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+    # Aquí solo usamos la lista maestra, sin repetir nombres
     qt_add_executable(BancoEstado
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        persona.h persona.cpp
-        recursos.qrc
+        ventanagestionclientes.h ventanagestionclientes.cpp ventanagestionclientes.ui
     )
     qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 else()
@@ -48,6 +63,7 @@ endif()
 
 target_link_libraries(BancoEstado PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 
+# Ajustes para Windows y Mac
 set_target_properties(BancoEstado PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER com.example.BancoEstado
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
