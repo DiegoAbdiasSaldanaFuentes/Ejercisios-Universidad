@@ -47,6 +47,9 @@
      <height>28</height>
     </rect>
    </property>
+   <property name="placeholderText">
+    <string>123456789-k</string>
+   </property>
   </widget>
   <widget class="QLineEdit" name="txtNombre">
    <property name="geometry">
@@ -57,6 +60,9 @@
      <height>28</height>
     </rect>
    </property>
+   <property name="placeholderText">
+    <string>usuario</string>
+   </property>
   </widget>
   <widget class="QLineEdit" name="txtClave">
    <property name="geometry">
@@ -66,6 +72,9 @@
      <width>113</width>
      <height>28</height>
     </rect>
+   </property>
+   <property name="placeholderText">
+    <string>********</string>
    </property>
   </widget>
   <widget class="QPushButton" name="btnAgregar">

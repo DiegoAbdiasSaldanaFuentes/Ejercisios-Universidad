@@ -1,6 +1,8 @@
 <RCC>
     <qresource prefix="/img/prefix1">
         <file>BancoEstado_idSgLxg2gT_1.png</file>
+        <file>bancario.png</file>
+        <file>../../../../../../../Downloads/home.png</file>
     </qresource>
     <qresource prefix="/">
         <file>../../../../../../../Downloads/70_sin_titulo_20251203001106.jpg</file>

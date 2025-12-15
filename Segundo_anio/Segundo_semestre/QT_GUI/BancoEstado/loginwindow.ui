@@ -16,7 +16,7 @@
   <property name="styleSheet">
    <string notr="true">/* Estilo para la ventana principal */
 QMainWindow {
-    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgb(103, 214, 255), stop:1 rgb(255, 255, 255))
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgb(0, 170, 255), stop:1 rgb(255, 255, 255))
 }
 
 
@@ -26,15 +26,15 @@ QMainWindow {
    <widget class="QPushButton" name="btnIngresar">
     <property name="geometry">
      <rect>
-      <x>260</x>
-      <y>500</y>
+      <x>270</x>
+      <y>460</y>
       <width>167</width>
       <height>38</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
-    background-color: rgb(255, 171, 97); /* Naranja Banco */
+    background-color: rgb(110, 161, 255); /* Naranja Banco */
     color: white;              /* Letra Blanca */
   
     padding: 8px;
@@ -42,7 +42,7 @@ QMainWindow {
 }</string>
     </property>
     <property name="text">
-     <string>Ingresar</string>
+     <string>Bienvenido</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="txtRut">
@@ -51,8 +51,8 @@ QMainWindow {
     </property>
     <property name="geometry">
      <rect>
-      <x>300</x>
-      <y>230</y>
+      <x>240</x>
+      <y>300</y>
       <width>261</width>
       <height>41</height>
      </rect>
@@ -87,7 +87,8 @@ QLineEdit#txtRut {
 /* Opcional: Estilo cuando el usuario hace clic en el campo (lo hace más interactivo) */
 QLineEdit#txtRut:focus {
     border-bottom: 2px solid #FF6600; /* La línea se vuelve naranja al hacer clic */
-}</string>
+}
+</string>
     </property>
     <property name="text">
      <string/>
@@ -99,8 +100,8 @@ QLineEdit#txtRut:focus {
    <widget class="QLineEdit" name="txtClave">
     <property name="geometry">
      <rect>
-      <x>300</x>
-      <y>330</y>
+      <x>240</x>
+      <y>370</y>
       <width>261</width>
       <height>51</height>
      </rect>
@@ -157,7 +158,8 @@ QLineEdit#txtRut:focus {
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: #FFFFFF;</string>
+     <string notr="true">background-color: #FFFFFF;
+border-radius: 15px;</string>
     </property>
     <property name="text">
      <string/>
@@ -176,11 +178,48 @@ QLineEdit#txtRut:focus {
      <string/>
     </property>
    </widget>
+   <widget class="QLabel" name="fondo_blanco_2">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>160</y>
+      <width>301</width>
+      <height>421</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(110, 161, 255);
+border-radius: 15px;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="fondo_blanco_3">
+    <property name="geometry">
+     <rect>
+      <x>260</x>
+      <y>220</y>
+      <width>141</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: transparent; 
+
+color:rgb(0, 0, 0)</string>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:26pt; font-weight:700;&quot;&gt;Log In&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
    <zorder>fondo_blanco</zorder>
    <zorder>btnIngresar</zorder>
    <zorder>txtRut</zorder>
    <zorder>txtClave</zorder>
    <zorder>label</zorder>
+   <zorder>fondo_blanco_2</zorder>
+   <zorder>fondo_blanco_3</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

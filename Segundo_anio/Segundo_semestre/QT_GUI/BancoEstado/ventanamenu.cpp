@@ -21,24 +21,20 @@ VentanaMenu::~VentanaMenu(){
 void VentanaMenu::setRutUsuario(std::string rut) {
     this->rutUsuario = rut;
 
-    // --- NUEVO CÓDIGO DE PERSONALIZACIÓN ---
+
     try {
         GestorBD gestor("banco.db");
         string nombreReal = gestor.obtenerNombreCliente(rut);
-
-        // Ajusta 'labelBienvenida' al nombre real de tu etiqueta en el diseño
         ui->labelBienvenida->setText("Bienvenido, " + QString::fromStdString(nombreReal));
-
     } catch (...) {
-        // Si falla, al menos mostramos el RUT
         ui->labelBienvenida->setText("Bienvenido " + QString::fromStdString(rut));
     }
-    // ---------------------------------------
-
     actualizarSaldoVisual();
 }
 
 void VentanaMenu::actualizarSaldoVisual() {
+
+
     try {
         GestorBD gestor("banco.db");
         int idCuenta = gestor.obtenerIdCuentaPorRut(rutUsuario);
@@ -51,7 +47,7 @@ void VentanaMenu::actualizarSaldoVisual() {
         }
     } catch (const std::exception &e) {
         ui->lblSaldo->setText("Error");
-        // No lanzamos MessageBox aquí para no spammear al usuario cada vez que se abre la ventana
+
         qDebug() << "Error actualizando saldo: " << e.what();
     }
 }
