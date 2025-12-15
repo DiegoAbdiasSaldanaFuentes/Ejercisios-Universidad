@@ -17,7 +17,7 @@
    <string notr="true">background: #ede0c9;</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="lblUsuario">
+   <widget class="QLabel" name="labelBienvenida">
     <property name="geometry">
      <rect>
       <x>300</x>
@@ -96,28 +96,6 @@ QLabel#lblSaldo {
     </property>
     <property name="text">
      <string>Volver</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btnHistorial">
-    <property name="geometry">
-     <rect>
-      <x>420</x>
-      <y>400</y>
-      <width>93</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton {
-    background-color: #FF6600; /* Naranja Banco */
-    color: white;              /* Letra Blanca */
-    border: 1px solid #CC4400;
-    padding: 8px;
-    border-radius: 4px;
-}</string>
-    </property>
-    <property name="text">
-     <string>Historial</string>
     </property>
    </widget>
    <widget class="QPushButton" name="btnTransferir">
@@ -223,8 +201,8 @@ QFrame {
    <widget class="QPushButton" name="btnGestion">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>450</y>
+      <x>420</x>
+      <y>400</y>
       <width>93</width>
       <height>31</height>
      </rect>
@@ -243,10 +221,9 @@ QFrame {
     </property>
    </widget>
    <zorder>decoracion3</zorder>
-   <zorder>lblUsuario</zorder>
+   <zorder>labelBienvenida</zorder>
    <zorder>lblSaldo</zorder>
    <zorder>btnLogout</zorder>
-   <zorder>btnHistorial</zorder>
    <zorder>btnTransferir</zorder>
    <zorder>btnDepositarTest</zorder>
    <zorder>label</zorder>

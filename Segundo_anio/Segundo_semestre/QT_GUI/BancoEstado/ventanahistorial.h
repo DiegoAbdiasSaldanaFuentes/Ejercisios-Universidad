@@ -1,9 +1,9 @@
 #ifndef VENTANAHISTORIAL_H
 #define VENTANAHISTORIAL_H
 
-#include <QDialog>
+#include <QDialog> // O QMainWindow, depende de cómo lo creaste. QDialog es mejor para popups.
 #include <string>
-#include "backend/GestorBD.h" // <--- CAMBIO IMPORTANTE
+#include "backend/GestorBD.h" // AJUSTA ESTA RUTA SI ES NECESARIO
 
 namespace Ui {
 class VentanaHistorial;
@@ -17,17 +17,14 @@ public:
     explicit VentanaHistorial(QWidget *parent = nullptr);
     ~VentanaHistorial();
 
-    // Nueva función vital: Para saber DE QUIÉN mostramos el historial
+    // Función vital para saber de quién mostrar el historial
     void setRutUsuario(std::string rut);
-
-    void cargarDatos();
-
-private slots:
-    void on_btnEliminar_clicked();
 
 private:
     Ui::VentanaHistorial *ui;
-    std::string rutUsuario; // Variable para recordar el RUT
+    std::string rutUsuario;
+
+    void cargarDatos(); // Función interna para llenar la tabla
 };
 
 #endif // VENTANAHISTORIAL_H

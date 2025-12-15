@@ -1,26 +1,14 @@
 #include "ventanahistorial.h"
 #include "ui_ventanahistorial.h"
-#include <QMessageBox> // Necesario para mensajes de error
+#include <QMessageBox>
 
 VentanaHistorial::VentanaHistorial(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::VentanaHistorial)
 {
     ui->setupUi(this);
-
-    // BLINDAJE 1: Verificar que la tabla exista antes de tocarla
-    if (ui->tblHistorial == nullptr) {
-        QMessageBox::critical(this, "Error Fatal", "La tabla 'tblHistorial' no existe en el diseño .ui");
-        return;
-    }
-
-    ui->tblHistorial->setColumnCount(4);
-    QStringList titulos;
-    titulos << "Tipo" << "Origen" << "Destino" << "Monto";
-    ui->tblHistorial->setHorizontalHeaderLabels(titulos);
-
-    // Ajuste visual
-    ui->tblHistorial->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    // NO TOCAMOS LA TABLA VISUAL PARA NADA.
+    // ASÍ EVITAMOS EL CRASH AL 100%.
 }
 
 VentanaHistorial::~VentanaHistorial()
@@ -29,43 +17,41 @@ VentanaHistorial::~VentanaHistorial()
 }
 
 void VentanaHistorial::setRutUsuario(std::string rut) {
-    // BLINDAJE 2: Si el RUT llega vacío, avisar (útil para debugging)
-    if (rut.empty()) {
-        QMessageBox::warning(this, "Advertencia", "No se recibió el RUT del usuario.");
-        return;
-    }
-
     this->rutUsuario = rut;
+
+    // Ejecutamos la carga apenas se abre la ventana
     cargarDatos();
 }
-void VentanaHistorial::cargarDatos()
-{
-    // Limpiamos la tabla primero
-    ui->tblHistorial->setRowCount(0);
 
+void VentanaHistorial::cargarDatos() {
     try {
-        // "try" significa: "Intenta hacer esto, y si explota, atrápalo"
+        // 1. Conectar BD
         GestorBD gestor("banco.db");
 
-        vector<Movimiento> lista = gestor.obtenerHistorial(rutUsuario);
+        // 2. Obtener datos
+        vector<Movimiento> historial = gestor.obtenerHistorial(rutUsuario);
 
-        for(size_t i = 0; i < lista.size(); i++) {
-            ui->tblHistorial->insertRow(i);
+        // 3. CONSTRUIR EL TEXTO DEL REPORTE
+        QString reporte = "=== HISTORIAL DE MOVIMIENTOS ===\n\n";
 
-            // Convertimos std::string a QString de forma segura
-            ui->tblHistorial->setItem(i, 0, new QTableWidgetItem(QString::fromStdString(lista[i].tipo)));
-            ui->tblHistorial->setItem(i, 1, new QTableWidgetItem(QString::fromStdString(lista[i].rutOrigen)));
-            ui->tblHistorial->setItem(i, 2, new QTableWidgetItem(QString::fromStdString(lista[i].rutDestino)));
-            ui->tblHistorial->setItem(i, 3, new QTableWidgetItem(QString::number(lista[i].monto)));
+        if (historial.empty()) {
+            reporte += "No hay movimientos registrados para este usuario.";
+        } else {
+            for (const Movimiento &m : historial) {
+                reporte += "Tipo: " + QString::fromStdString(m.tipo) + "\n";
+                reporte += "Origen: " + QString::fromStdString(m.rutOrigen) + "\n";
+                reporte += "Destino: " + QString::fromStdString(m.rutDestino) + "\n";
+                reporte += "Monto: $" + QString::number(m.monto) + "\n";
+                reporte += "Fecha: " + QString::fromStdString(m.fecha) + "\n";
+                reporte += "-----------------------------------\n";
+            }
         }
-    }
-    catch (std::exception &e) {
-        // Si ocurre un error, NO cerramos. Mostramos mensaje.
-        QMessageBox::critical(this, "Error de Historial", "No se pudo leer la base de datos: " + QString(e.what()));
-    }
-}
 
-void VentanaHistorial::on_btnEliminar_clicked()
-{
-    // Botón sin acción por seguridad
+        // 4. MOSTRARLO EN PANTALLA (Pop-up)
+        // Esto detiene la ventana vacía y muestra el texto encima.
+        QMessageBox::information(this, "Historial Seguro", reporte);
+
+    } catch (const std::exception &e) {
+        QMessageBox::critical(this, "Error", e.what());
+    }
 }

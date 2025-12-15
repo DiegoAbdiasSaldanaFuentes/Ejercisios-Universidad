@@ -13,7 +13,7 @@ GestorBD::GestorBD(const string& nombreDB) {
     conexion = db;
 
     if (resultado != SQLITE_OK) {
-        throw runtime_error("Error al abrir la base de datos");
+        throw runtime_error("Error fatal: No se pudo abrir la base de datos.");
     }
 
     // 1. Tabla Clientes
@@ -31,7 +31,7 @@ GestorBD::GestorBD(const string& nombreDB) {
         "saldo REAL DEFAULT 0.0, "
         "FOREIGN KEY (rut_cliente) REFERENCES clientes(rut));";
 
-    // 3. --- NUEVA TABLA: MOVIMIENTOS ---
+    // 3. Tabla Movimientos
     const char* sqlMovimientos =
         "CREATE TABLE IF NOT EXISTS movimientos ("
         "id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -39,21 +39,19 @@ GestorBD::GestorBD(const string& nombreDB) {
         "rut_origen TEXT, " // Quien envía
         "rut_destino TEXT, "// Quien recibe
         "monto REAL, "
-        "fecha TEXT DEFAULT CURRENT_TIMESTAMP);"; // Fecha automática
+        "fecha TEXT DEFAULT CURRENT_TIMESTAMP);";
 
     char* errorMsg = nullptr;
+
+    // Ejecutar creaciones
     sqlite3_exec(db, sqlClientes, nullptr, nullptr, &errorMsg);
+    if (errorMsg) { cout << "Error tabla Clientes: " << errorMsg << endl; sqlite3_free(errorMsg); }
+
     sqlite3_exec(db, sqlCuentas, nullptr, nullptr, &errorMsg);
+    if (errorMsg) { cout << "Error tabla Cuentas: " << errorMsg << endl; sqlite3_free(errorMsg); }
 
-    // Ejecutamos la creación de la tabla movimientos
     sqlite3_exec(db, sqlMovimientos, nullptr, nullptr, &errorMsg);
-
-    if (errorMsg) {
-        string err = errorMsg;
-        sqlite3_free(errorMsg);
-        // No lanzamos error fatal, pero imprimimos por si acaso
-        cout << "SQL Error: " << err << endl;
-    }
+    if (errorMsg) { cout << "Error tabla Movimientos: " << errorMsg << endl; sqlite3_free(errorMsg); }
 }
 
 GestorBD::~GestorBD() {
@@ -62,27 +60,26 @@ GestorBD::~GestorBD() {
     }
 }
 
-// ... (Tus funciones de Clientes y Cuentas siguen igual, las omito para no hacer spam,
-//      PERO ASEGÚRATE DE NO BORRARLAS. Si copias todo, mantén las de antes o pide el código completo).
-// ... [MANTÉN AQUÍ TUS FUNCIONES DE AGREGAR, OBTENER, ELIMINAR CLIENTES Y CUENTAS] ...
-// ... Si quieres te paso el archivo ENTERO de nuevo para evitar errores de copy-paste.
-
-// --- AQUÍ PEGARÉ LAS FUNCIONES DE ARRIBA RESUMIDAS PARA QUE EL CÓDIGO SEA COMPLETO ---
-// (Te doy el bloque completo abajo para reemplazar todo el archivo sin miedo)
-
-// =========================================================
-// PEGA ESTO EN TU ARCHIVO GestorBD.cpp COMPLETO
-// =========================================================
+// --- GESTIÓN DE CLIENTES ---
 
 void GestorBD::agregarCliente(string rut, string nombre, string password) {
     sqlite3* db = (sqlite3*)conexion;
     string sql = "INSERT INTO clientes (rut, nombre, password) VALUES (?, ?, ?)";
     sqlite3_stmt* stmt;
-    if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) throw runtime_error("Error SQL agregarCliente");
-    sqlite3_bind_text(stmt, 1, rut.c_str(), -1, SQLITE_STATIC);
-    sqlite3_bind_text(stmt, 2, nombre.c_str(), -1, SQLITE_STATIC);
-    sqlite3_bind_text(stmt, 3, password.c_str(), -1, SQLITE_STATIC);
-    sqlite3_step(stmt);
+
+    if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK)
+        throw runtime_error("Error SQL (Prepare agregarCliente): " + string(sqlite3_errmsg(db)));
+
+    // Usamos el cast -1 (SQLITE_TRANSIENT) para seguridad de memoria
+    sqlite3_bind_text(stmt, 1, rut.c_str(), -1, (sqlite3_destructor_type)-1);
+    sqlite3_bind_text(stmt, 2, nombre.c_str(), -1, (sqlite3_destructor_type)-1);
+    sqlite3_bind_text(stmt, 3, password.c_str(), -1, (sqlite3_destructor_type)-1);
+
+    if (sqlite3_step(stmt) != SQLITE_DONE) {
+        string error = sqlite3_errmsg(db);
+        sqlite3_finalize(stmt);
+        throw runtime_error("Error al insertar cliente (posible RUT duplicado): " + error);
+    }
     sqlite3_finalize(stmt);
 }
 
@@ -91,6 +88,7 @@ vector<ClienteData> GestorBD::obtenerTodosLosClientes() {
     sqlite3* db = (sqlite3*)conexion;
     sqlite3_stmt* stmt;
     string sql = "SELECT rut, nombre, password FROM clientes";
+
     if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
         while (sqlite3_step(stmt) == SQLITE_ROW) {
             ClienteData c;
@@ -108,11 +106,18 @@ void GestorBD::modificarCliente(string rut, string nuevoNombre, string nuevaClav
     sqlite3* db = (sqlite3*)conexion;
     string sql = "UPDATE clientes SET nombre = ?, password = ? WHERE rut = ?";
     sqlite3_stmt* stmt;
-    if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) throw runtime_error("Error SQL modificar");
-    sqlite3_bind_text(stmt, 1, nuevoNombre.c_str(), -1, SQLITE_STATIC);
-    sqlite3_bind_text(stmt, 2, nuevaClave.c_str(), -1, SQLITE_STATIC);
-    sqlite3_bind_text(stmt, 3, rut.c_str(), -1, SQLITE_STATIC);
-    sqlite3_step(stmt);
+
+    if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK)
+        throw runtime_error("Error SQL (Prepare modificarCliente): " + string(sqlite3_errmsg(db)));
+
+    sqlite3_bind_text(stmt, 1, nuevoNombre.c_str(), -1, (sqlite3_destructor_type)-1);
+    sqlite3_bind_text(stmt, 2, nuevaClave.c_str(), -1, (sqlite3_destructor_type)-1);
+    sqlite3_bind_text(stmt, 3, rut.c_str(), -1, (sqlite3_destructor_type)-1);
+
+    if (sqlite3_step(stmt) != SQLITE_DONE) {
+        sqlite3_finalize(stmt);
+        throw runtime_error("Error al modificar cliente: " + string(sqlite3_errmsg(db)));
+    }
     sqlite3_finalize(stmt);
 }
 
@@ -120,8 +125,11 @@ void GestorBD::eliminarCliente(string rut) {
     sqlite3* db = (sqlite3*)conexion;
     string sql = "DELETE FROM clientes WHERE rut = ?";
     sqlite3_stmt* stmt;
-    if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) throw runtime_error("Error SQL eliminar");
-    sqlite3_bind_text(stmt, 1, rut.c_str(), -1, SQLITE_STATIC);
+
+    if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK)
+        throw runtime_error("Error SQL (Prepare eliminarCliente)");
+
+    sqlite3_bind_text(stmt, 1, rut.c_str(), -1, (sqlite3_destructor_type)-1);
     sqlite3_step(stmt);
     sqlite3_finalize(stmt);
 }
@@ -130,8 +138,10 @@ bool GestorBD::existeCliente(string rut) {
     sqlite3* db = (sqlite3*)conexion;
     sqlite3_stmt* stmt;
     string sql = "SELECT rut FROM clientes WHERE rut = ?";
+
     if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) return false;
-    sqlite3_bind_text(stmt, 1, rut.c_str(), -1, SQLITE_STATIC);
+
+    sqlite3_bind_text(stmt, 1, rut.c_str(), -1, (sqlite3_destructor_type)-1);
     bool existe = (sqlite3_step(stmt) == SQLITE_ROW);
     sqlite3_finalize(stmt);
     return existe;
@@ -141,22 +151,36 @@ bool GestorBD::validarCliente(string rut, string password) {
     sqlite3* db = (sqlite3*)conexion;
     string sql = "SELECT count(*) FROM clientes WHERE rut = ? AND password = ?";
     sqlite3_stmt* stmt;
+
     if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) return false;
-    sqlite3_bind_text(stmt, 1, rut.c_str(), -1, SQLITE_STATIC);
-    sqlite3_bind_text(stmt, 2, password.c_str(), -1, SQLITE_STATIC);
+
+    sqlite3_bind_text(stmt, 1, rut.c_str(), -1, (sqlite3_destructor_type)-1);
+    sqlite3_bind_text(stmt, 2, password.c_str(), -1, (sqlite3_destructor_type)-1);
+
     bool valido = false;
-    if (sqlite3_step(stmt) == SQLITE_ROW) valido = (sqlite3_column_int(stmt, 0) > 0);
+    if (sqlite3_step(stmt) == SQLITE_ROW) {
+        valido = (sqlite3_column_int(stmt, 0) > 0);
+    }
     sqlite3_finalize(stmt);
     return valido;
 }
+
+// --- GESTIÓN DE CUENTAS ---
 
 int GestorBD::crearCuenta(string rutCliente) {
     sqlite3* db = (sqlite3*)conexion;
     string sql = "INSERT INTO cuentas (rut_cliente, saldo) VALUES (?, 0.0)";
     sqlite3_stmt* stmt;
+
     if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) return -1;
-    sqlite3_bind_text(stmt, 1, rutCliente.c_str(), -1, SQLITE_STATIC);
-    sqlite3_step(stmt);
+
+    sqlite3_bind_text(stmt, 1, rutCliente.c_str(), -1, (sqlite3_destructor_type)-1);
+
+    if (sqlite3_step(stmt) != SQLITE_DONE) {
+        sqlite3_finalize(stmt);
+        return -1;
+    }
+
     sqlite3_finalize(stmt);
     return (int)sqlite3_last_insert_rowid(db);
 }
@@ -165,10 +189,15 @@ int GestorBD::obtenerIdCuentaPorRut(string rut) {
     sqlite3* db = (sqlite3*)conexion;
     string sql = "SELECT id FROM cuentas WHERE rut_cliente = ?";
     sqlite3_stmt* stmt;
+
     if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) return -1;
-    sqlite3_bind_text(stmt, 1, rut.c_str(), -1, SQLITE_STATIC);
+
+    sqlite3_bind_text(stmt, 1, rut.c_str(), -1, (sqlite3_destructor_type)-1);
+
     int id = -1;
-    if (sqlite3_step(stmt) == SQLITE_ROW) id = sqlite3_column_int(stmt, 0);
+    if (sqlite3_step(stmt) == SQLITE_ROW) {
+        id = sqlite3_column_int(stmt, 0);
+    }
     sqlite3_finalize(stmt);
     return id;
 }
@@ -177,10 +206,15 @@ double GestorBD::obtenerSaldo(int idCuenta) {
     sqlite3* db = (sqlite3*)conexion;
     string sql = "SELECT saldo FROM cuentas WHERE id = ?";
     sqlite3_stmt* stmt;
+
     if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) return 0.0;
+
     sqlite3_bind_int(stmt, 1, idCuenta);
+
     double saldo = 0.0;
-    if (sqlite3_step(stmt) == SQLITE_ROW) saldo = sqlite3_column_double(stmt, 0);
+    if (sqlite3_step(stmt) == SQLITE_ROW) {
+        saldo = sqlite3_column_double(stmt, 0);
+    }
     sqlite3_finalize(stmt);
     return saldo;
 }
@@ -189,68 +223,59 @@ void GestorBD::actualizarSaldo(int idCuenta, double nuevoSaldo) {
     sqlite3* db = (sqlite3*)conexion;
     string sql = "UPDATE cuentas SET saldo = ? WHERE id = ?";
     sqlite3_stmt* stmt;
+
     if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) return;
+
     sqlite3_bind_double(stmt, 1, nuevoSaldo);
     sqlite3_bind_int(stmt, 2, idCuenta);
+
     sqlite3_step(stmt);
     sqlite3_finalize(stmt);
 }
 
-// --- NUEVAS FUNCIONES DE HISTORIAL ---
+// --- GESTIÓN DE HISTORIAL (MOVIMIENTOS) ---
 
 void GestorBD::registrarMovimiento(string tipo, string origen, string destino, double monto) {
     sqlite3* db = (sqlite3*)conexion;
-    // Insertamos los datos. La fecha la pone SQLite sola (CURRENT_TIMESTAMP)
     string sql = "INSERT INTO movimientos (tipo, rut_origen, rut_destino, monto) VALUES (?, ?, ?, ?)";
     sqlite3_stmt* stmt;
 
     if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
-        throw runtime_error("Error SQL al registrar movimiento");
+        throw runtime_error("Error SQL (Prepare registrarMovimiento): " + string(sqlite3_errmsg(db)));
     }
 
-    sqlite3_bind_text(stmt, 1, tipo.c_str(), -1, SQLITE_STATIC);
-    sqlite3_bind_text(stmt, 2, origen.c_str(), -1, SQLITE_STATIC);
-    sqlite3_bind_text(stmt, 3, destino.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 1, tipo.c_str(), -1, (sqlite3_destructor_type)-1);
+    sqlite3_bind_text(stmt, 2, origen.c_str(), -1, (sqlite3_destructor_type)-1);
+    sqlite3_bind_text(stmt, 3, destino.c_str(), -1, (sqlite3_destructor_type)-1);
     sqlite3_bind_double(stmt, 4, monto);
 
-    sqlite3_step(stmt);
+    if (sqlite3_step(stmt) != SQLITE_DONE) {
+        string err = sqlite3_errmsg(db);
+        sqlite3_finalize(stmt);
+        throw runtime_error("Error al registrar movimiento: " + err);
+    }
     sqlite3_finalize(stmt);
 }
-vector<Movimiento> GestorBD::obtenerHistorial(string rutUsuario) {
-    vector<Movimiento> lista;
+
+
+string GestorBD::obtenerNombreCliente(string rut) {
     sqlite3* db = (sqlite3*)conexion;
     sqlite3_stmt* stmt;
+    string sql = "SELECT nombre FROM clientes WHERE rut = ?";
+    string nombreEncontrado = "Usuario"; // Valor por defecto si falla
 
-    string sql = "SELECT tipo, rut_origen, rut_destino, monto, fecha FROM movimientos "
-                 "WHERE rut_origen = ? OR rut_destino = ? ORDER BY id DESC";
+    if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
+        // Usamos el cast -1 para seguridad, igual que en las otras funciones
+        sqlite3_bind_text(stmt, 1, rut.c_str(), -1, (sqlite3_destructor_type)-1);
 
-    if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
-        return lista; // Si falla la consulta, devolvemos lista vacía y NO cerramos el programa
+        if (sqlite3_step(stmt) == SQLITE_ROW) {
+            // Leemos la columna 0 (nombre)
+            const char* val = (const char*)sqlite3_column_text(stmt, 0);
+            if (val) {
+                nombreEncontrado = string(val);
+            }
+        }
     }
-
-    sqlite3_bind_text(stmt, 1, rutUsuario.c_str(), -1, SQLITE_STATIC);
-    sqlite3_bind_text(stmt, 2, rutUsuario.c_str(), -1, SQLITE_STATIC);
-
-    while (sqlite3_step(stmt) == SQLITE_ROW) {
-        Movimiento m;
-
-        // --- BLINDAJE ANTI-CRASH ---
-        // Verificamos si la columna tiene texto o es NULL
-        const char* txtTipo = (const char*)sqlite3_column_text(stmt, 0);
-        const char* txtOrigen = (const char*)sqlite3_column_text(stmt, 1);
-        const char* txtDestino = (const char*)sqlite3_column_text(stmt, 2);
-        const char* txtFecha = (const char*)sqlite3_column_text(stmt, 4);
-
-        // Usamos operador ternario: Si existe ? úsalo : si no, pon texto genérico
-        m.tipo = txtTipo ? string(txtTipo) : "Transferencia";
-        m.rutOrigen = txtOrigen ? string(txtOrigen) : "Desconocido";
-        m.rutDestino = txtDestino ? string(txtDestino) : "Desconocido";
-        m.monto = sqlite3_column_double(stmt, 3);
-        m.fecha = txtFecha ? string(txtFecha) : "--";
-
-        lista.push_back(m);
-    }
-
     sqlite3_finalize(stmt);
-    return lista;
+    return nombreEncontrado;
 }

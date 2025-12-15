@@ -1,6 +1,7 @@
 #include "ventanaoperacion.h"
 #include "ui_ventanaoperacion.h"
 #include "ventanamenu.h"
+#include "backend/GestorBD.h" // Ojo con la ruta, ajustala si es necesario
 #include <QMessageBox>
 #include <stdexcept>
 #include <QIntValidator>
@@ -10,8 +11,8 @@ ventanaoperacion::ventanaoperacion(QWidget *parent)
     , ui(new Ui::ventanaoperacion)
 {
     ui->setupUi(this);
-    // Solo números en el campo de monto
-    ui->txtMonto->setValidator(new QIntValidator(0, 99999999, this));
+    // Validación: Solo números positivos
+    ui->txtMonto->setValidator(new QIntValidator(1, 99999999, this));
 }
 
 ventanaoperacion::~ventanaoperacion()
@@ -21,83 +22,58 @@ ventanaoperacion::~ventanaoperacion()
 
 void ventanaoperacion::setRutUsuario(std::string rut) {
     this->rutUsuario = rut;
-    // Opcional: Podrías poner el rut en algún label para saber quién eres
 }
 
 void ventanaoperacion::on_btnVolver_clicked()
 {
-    // Al volver, creamos el menú de nuevo
     VentanaMenu *menu = new VentanaMenu();
-
-    // --- NO OLVIDAR: Devolverle el RUT al menú ---
     menu->setRutUsuario(this->rutUsuario);
-
     menu->show();
     this->close();
 }
+
 void ventanaoperacion::on_btnAccion_clicked()
 {
     try {
-        // 1. Capturar datos
+        // 1. Validaciones básicas de interfaz
         QString textoMonto = ui->txtMonto->text();
         QString textoDestino = ui->txtDestino->text();
 
-        if(textoMonto.isEmpty() || textoDestino.isEmpty()) {
-            throw std::invalid_argument("Faltan datos. Rellene todo.");
-        }
+        if(textoMonto.isEmpty() || textoDestino.isEmpty())
+            throw std::invalid_argument("Faltan datos.");
 
-        // Conversión y validación de monto
         bool esNumero;
         int monto = textoMonto.toInt(&esNumero);
-
-        if (!esNumero || monto <= 0) {
-            throw std::invalid_argument("El monto debe ser un número positivo.");
-        }
+        if (!esNumero || monto <= 0)
+            throw std::invalid_argument("Monto inválido.");
 
         std::string rutDestino = textoDestino.toStdString();
-
-        // Evitar auto-transferencia
-        if (rutDestino == rutUsuario) {
+        if (rutDestino == rutUsuario)
             throw std::invalid_argument("No puedes transferirte a ti mismo.");
-        }
 
-        // 2. CONEXIÓN CON LA BASE DE DATOS
+        // 2. Lógica de Negocio (BD)
         GestorBD gestor("banco.db");
 
-        // A. Obtener mis datos (Origen)
+        // A. Validar saldos y existencia
         int miId = gestor.obtenerIdCuentaPorRut(rutUsuario);
-        if (miId == -1) throw std::runtime_error("Error: Tu usuario no tiene cuenta activa.");
+        if (miId == -1) throw std::runtime_error("Tu usuario no tiene cuenta activa.");
 
         double miSaldo = gestor.obtenerSaldo(miId);
+        if (monto > miSaldo) throw std::runtime_error("Saldo insuficiente.");
 
-        // B. Obtener datos destino
         int idDestino = gestor.obtenerIdCuentaPorRut(rutDestino);
-        if (idDestino == -1) throw std::runtime_error("El RUT de destino no existe en el banco.");
+        if (idDestino == -1) throw std::runtime_error("El destinatario no existe.");
 
-        // C. Verificar fondos
-        if (monto > miSaldo) {
-            throw std::runtime_error("Saldo insuficiente en la cuenta.");
-        }
+        // B. Mover el dinero (Actualizar saldos)
+        gestor.actualizarSaldo(miId, miSaldo - monto);
+        gestor.actualizarSaldo(idDestino, gestor.obtenerSaldo(idDestino) + monto);
 
-        // 3. EJECUTAR LA TRANSACCIÓN (Backend)
-        double nuevoSaldoMio = miSaldo - monto;
-        double nuevoSaldoDestino = gestor.obtenerSaldo(idDestino) + monto;
-
-        gestor.actualizarSaldo(miId, nuevoSaldoMio);
-        gestor.actualizarSaldo(idDestino, nuevoSaldoDestino);
-
-        // --- ¡AQUÍ ESTÁ LO NUEVO! GUARDAMOS EL RECIBO ---
-        // (Tipo, Origen, Destino, Monto)
+        // C. GUARDAR EL COMPROBANTE (Esto es lo que te faltaba)
         gestor.registrarMovimiento("Transferencia", rutUsuario, rutDestino, (double)monto);
 
-        // 4. Feedback
-        QMessageBox::information(this, "Éxito", "Transferencia realizada correctamente.");
+        QMessageBox::information(this, "Éxito", "Transferencia realizada y guardada.");
 
-        // Limpiar
-        ui->txtMonto->clear();
-        ui->txtDestino->clear();
-
-        // Volver al menú automáticamente
+        // Volver al menú
         on_btnVolver_clicked();
 
     } catch (const std::exception &e) {

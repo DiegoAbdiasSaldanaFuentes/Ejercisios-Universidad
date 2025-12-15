@@ -1,8 +1,9 @@
 #include "ventanamenu.h"
 #include "ui_ventanamenu.h"
+#include "GestorBD.h"
 #include "loginwindow.h"
 #include "ventanaoperacion.h"
-#include "ventanahistorial.h" // Si no usas historial aun, comenta esto
+#include "ventanagestionclientes.h"
 #include <QMessageBox>
 #include <QShowEvent>
 
@@ -17,17 +18,29 @@ VentanaMenu::~VentanaMenu(){
     delete ui;
 }
 
-// --- RECIBIR EL RUT DEL LOGIN ---
 void VentanaMenu::setRutUsuario(std::string rut) {
     this->rutUsuario = rut;
-    actualizarSaldoVisual(); // Apenas sabemos quién es, mostramos su saldo
+
+    // --- NUEVO CÓDIGO DE PERSONALIZACIÓN ---
+    try {
+        GestorBD gestor("banco.db");
+        string nombreReal = gestor.obtenerNombreCliente(rut);
+
+        // Ajusta 'labelBienvenida' al nombre real de tu etiqueta en el diseño
+        ui->labelBienvenida->setText("Bienvenido, " + QString::fromStdString(nombreReal));
+
+    } catch (...) {
+        // Si falla, al menos mostramos el RUT
+        ui->labelBienvenida->setText("Bienvenido " + QString::fromStdString(rut));
+    }
+    // ---------------------------------------
+
+    actualizarSaldoVisual();
 }
 
-// --- CONSULTAR BD Y MOSTRAR SALDO ---
 void VentanaMenu::actualizarSaldoVisual() {
     try {
         GestorBD gestor("banco.db");
-        // Buscamos la cuenta del usuario actual
         int idCuenta = gestor.obtenerIdCuentaPorRut(rutUsuario);
 
         if (idCuenta != -1) {
@@ -36,15 +49,16 @@ void VentanaMenu::actualizarSaldoVisual() {
         } else {
             ui->lblSaldo->setText("$ 0 (Sin Cuenta)");
         }
-    } catch (...) {
-        ui->lblSaldo->setText("Error BD");
+    } catch (const std::exception &e) {
+        ui->lblSaldo->setText("Error");
+        // No lanzamos MessageBox aquí para no spammear al usuario cada vez que se abre la ventana
+        qDebug() << "Error actualizando saldo: " << e.what();
     }
 }
 
 void VentanaMenu::showEvent(QShowEvent *event)
 {
     QMainWindow::showEvent(event);
-    // Cada vez que la ventana aparece, refrescamos el dinero
     if (!rutUsuario.empty()) {
         actualizarSaldoVisual();
     }
@@ -57,66 +71,38 @@ void VentanaMenu::on_btnLogout_clicked(){
 }
 
 void VentanaMenu::on_btnTransferir_clicked(){
-    // Crear la ventana de operación
     ventanaoperacion *ventana = new ventanaoperacion();
-
-    // --- PASO CRUCIAL: LE PASAMOS EL RUT ---
     ventana->setRutUsuario(this->rutUsuario);
-
     ventana->show();
-    this->close(); // Cerramos el menú para no tener ventanas duplicadas
+    this->close();
 }
-// En ventanamenu.cpp (Asegúrate de incluir "ventanahistorial.h" arriba)
 
-void VentanaMenu::on_btnHistorial_clicked()
-{
-    // 1. Crear la ventana
-    VentanaHistorial *ventana = new VentanaHistorial(this);
 
-    // 2. IMPORTANTE: Pasarle el RUT (Si no, saldrá vacía)
-    ventana->setRutUsuario(this->rutUsuario);
-
-    // 3. Mostrarla
-    ventana->exec(); // Usamos exec() porque es un QDialog (ventana modal)
-}
 
 void VentanaMenu::on_btnDepositarTest_clicked()
 {
     try {
         GestorBD gestor("banco.db");
-
-        // 1. Buscar mi cuenta
         int idCuenta = gestor.obtenerIdCuentaPorRut(this->rutUsuario);
 
-        if (idCuenta == -1) {
-            throw std::runtime_error("Error crítico: Usuario sin cuenta bancaria.");
-        }
+        if (idCuenta == -1) throw std::runtime_error("Usuario sin cuenta.");
 
-        // 2. Leer saldo actual de la BD
         double saldoActual = gestor.obtenerSaldo(idCuenta);
+        gestor.actualizarSaldo(idCuenta, saldoActual + 10000);
 
-        // 3. Sumar dinero
-        double nuevoSaldo = saldoActual + 10000;
+        // Registrar movimiento 'ficticio' de deposito
+        gestor.registrarMovimiento("Deposito (Test)", "Cajero", this->rutUsuario, 10000);
 
-        // 4. Guardar en BD
-        gestor.actualizarSaldo(idCuenta, nuevoSaldo);
-
-        // 5. Refrescar pantalla
         actualizarSaldoVisual();
-
-        QMessageBox::information(this, "Regalo", "Se depositaron $10.000 en la Base de Datos.");
+        QMessageBox::information(this, "Regalo", "Se depositaron $10.000 + Registro en Historial.");
 
     } catch (const std::exception &e) {
         QMessageBox::warning(this, "Error", e.what());
     }
 }
 
-
-
 void VentanaMenu::on_btnGestion_clicked()
 {
-    // Crear y mostrar la ventana de gestión
     ventanagestionclientes *ventana = new ventanagestionclientes();
     ventana->show();
 }
-

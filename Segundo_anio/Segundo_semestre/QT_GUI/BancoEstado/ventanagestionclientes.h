@@ -2,14 +2,14 @@
 #define VENTANAGESTIONCLIENTES_H
 
 #include <QWidget>
-#include "backend/GestorBD.h"
+#include "backend/GestorBD.h" // Asegura la ruta correcta
 #include <QTableWidgetItem>
 
 namespace Ui {
-class ventanagestionclientes; // <--- Aquí estaba el error, ahora es minúscula
+class ventanagestionclientes;
 }
 
-class ventanagestionclientes : public QWidget // <--- Clase en minúscula
+class ventanagestionclientes : public QWidget
 {
     Q_OBJECT
 
@@ -20,10 +20,14 @@ public:
 private slots:
     void on_btnAgregar_clicked();
     void on_btnEliminar_clicked();
-    void on_btnCargar_clicked();
+
+    // --- NUEVOS SLOTS ---
+    void on_btnModificar_clicked();      // Lógica para actualizar
+    void on_btnCargar_clicked();         // Lógica para limpiar/refrescar
+    void on_tablaClientes_cellClicked(int row, int column); // Lógica para llenar campos al tocar tabla
 
 private:
-    Ui::ventanagestionclientes *ui; // <--- Puntero en minúscula
+    Ui::ventanagestionclientes *ui;
     void cargarDatosEnTabla();
 };
 

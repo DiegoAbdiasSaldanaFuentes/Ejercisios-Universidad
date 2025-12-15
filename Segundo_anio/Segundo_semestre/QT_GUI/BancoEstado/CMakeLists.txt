@@ -25,7 +25,7 @@ set(PROJECT_SOURCES
         loginwindow.cpp loginwindow.h loginwindow.ui
         ventanamenu.cpp ventanamenu.h ventanamenu.ui
         ventanaoperacion.cpp ventanaoperacion.h ventanaoperacion.ui
-        ventanahistorial.cpp ventanahistorial.h ventanahistorial.ui
+
         cliente.cpp cliente.h
         persona.cpp persona.h
 

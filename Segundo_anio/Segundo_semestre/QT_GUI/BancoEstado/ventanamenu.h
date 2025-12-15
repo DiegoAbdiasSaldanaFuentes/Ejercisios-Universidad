@@ -27,9 +27,7 @@ public:
 private slots:
     void on_btnLogout_clicked();
     void on_btnTransferir_clicked();
-    void on_btnHistorial_clicked();
     void on_btnDepositarTest_clicked(); // Lo dejaremos, pero conectado a la BD
-
     void on_btnGestion_clicked();
 
 private:

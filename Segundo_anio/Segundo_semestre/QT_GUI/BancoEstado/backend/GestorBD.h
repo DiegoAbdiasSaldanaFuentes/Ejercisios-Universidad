@@ -49,8 +49,10 @@ public:
     // 1. Guardar un movimiento
     void registrarMovimiento(string tipo, string origen, string destino, double monto);
 
-    // 2. Leer los movimientos de UNA persona
-    vector<Movimiento> obtenerHistorial(string rutUsuario);
+    // ... dentro de la clase GestorBD, bajo public:
+    std::string obtenerNombreCliente(std::string rut);
+
+
 };
 
 #endif // GESTORBD_H
