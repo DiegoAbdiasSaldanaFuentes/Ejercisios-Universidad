@@ -7,7 +7,7 @@
 
 using namespace std;
 
-GestorBD::GestorBD(const string& nombreDB) {
+GestorBD::GestorBD(string nombreDB) {
     sqlite3* db;
     int resultado = sqlite3_open(nombreDB.c_str(), &db);
     conexion = db;
@@ -278,4 +278,17 @@ string GestorBD::obtenerNombreCliente(string rut) {
     }
     sqlite3_finalize(stmt);
     return nombreEncontrado;
+}
+
+
+//SOBRECARGA DE MÉTODO
+double GestorBD::obtenerSaldo(string rut) {
+    //  Buscamos el ID usando el RUT
+    int id = obtenerIdCuentaPorRut(rut);
+
+    // Si no existe, devolvemos 0
+    if (id == -1) return 0.0;
+
+    // Llamamos a la funcion original
+    return obtenerSaldo(id);
 }

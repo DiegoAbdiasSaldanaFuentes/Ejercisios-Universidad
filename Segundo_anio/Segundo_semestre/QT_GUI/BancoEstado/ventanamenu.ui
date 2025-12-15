@@ -49,11 +49,14 @@
     </property>
    </widget>
    <widget class="QLabel" name="lblSaldo">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
-      <x>280</x>
+      <x>400</x>
       <y>210</y>
-      <width>621</width>
+      <width>381</width>
       <height>111</height>
      </rect>
     </property>
@@ -306,9 +309,9 @@ border:  100px rgb(190, 70, 238);
     </property>
    </widget>
    <zorder>fondo_blanco_7</zorder>
+   <zorder>fondo_blanco_3</zorder>
    <zorder>fondo_blanco_6</zorder>
    <zorder>fondo_blanco_5</zorder>
-   <zorder>fondo_blanco_3</zorder>
    <zorder>fondo_blanco_2</zorder>
    <zorder>fondo_blanco</zorder>
    <zorder>labelBienvenida</zorder>

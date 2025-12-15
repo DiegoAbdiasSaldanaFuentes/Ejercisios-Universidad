@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>ventanaoperacion</class>
  <widget class="QMainWindow" name="ventanaoperacion">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1117</width>
+    <height>621</height>
+   </rect>
+  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
@@ -281,7 +289,7 @@ border:  100px rgb(190, 70, 238);
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1115</width>
+     <width>1117</width>
      <height>25</height>
     </rect>
    </property>

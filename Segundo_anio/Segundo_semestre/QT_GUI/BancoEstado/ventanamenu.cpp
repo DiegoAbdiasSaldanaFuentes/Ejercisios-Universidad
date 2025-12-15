@@ -86,11 +86,10 @@ void VentanaMenu::on_btnDepositarTest_clicked()
         double saldoActual = gestor.obtenerSaldo(idCuenta);
         gestor.actualizarSaldo(idCuenta, saldoActual + 10000);
 
-        // Registrar movimiento 'ficticio' de deposito
         gestor.registrarMovimiento("Deposito (Test)", "Cajero", this->rutUsuario, 10000);
 
         actualizarSaldoVisual();
-        QMessageBox::information(this, "Regalo", "Se depositaron $10.000 + Registro en Historial.");
+        QMessageBox::information(this, "Regalo", "Se depositaron $10.000");
 
     } catch (const std::exception &e) {
         QMessageBox::warning(this, "Error", e.what());
