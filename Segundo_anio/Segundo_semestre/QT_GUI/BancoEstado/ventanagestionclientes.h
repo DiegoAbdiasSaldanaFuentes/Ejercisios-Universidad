@@ -2,7 +2,7 @@
 #define VENTANAGESTIONCLIENTES_H
 
 #include <QWidget>
-#include "backend/GestorBD.h" // Asegura la ruta correcta
+#include "backend/GestorBD.h"
 #include <QTableWidgetItem>
 
 namespace Ui {
@@ -21,14 +21,14 @@ private slots:
     void on_btnAgregar_clicked();
     void on_btnEliminar_clicked();
 
-    // --- NUEVOS SLOTS ---
-    void on_btnModificar_clicked();      // Lógica para actualizar
-    void on_btnCargar_clicked();         // Lógica para limpiar/refrescar
-    void on_tablaClientes_cellClicked(int row, int column); // Lógica para llenar campos al tocar tabla
+
+    void on_btnModificar_clicked();
+    void on_btnCargar_clicked();
+    void on_tablaClientes_cellClicked(int row, int column);
 
 private:
     Ui::ventanagestionclientes *ui;
     void cargarDatosEnTabla();
 };
 
-#endif // VENTANAGESTIONCLIENTES_H
+#endif

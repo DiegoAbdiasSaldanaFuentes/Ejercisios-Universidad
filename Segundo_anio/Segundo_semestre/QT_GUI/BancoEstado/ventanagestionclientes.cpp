@@ -47,41 +47,37 @@ void ventanagestionclientes::cargarDatosEnTabla()
     }
 }
 
-// --- 1. FUNCIÓN CARGAR (AHORA SIRVE PARA LIMPIAR) ---
+// FUNCIÓN CARGAR
 void ventanagestionclientes::on_btnCargar_clicked()
 {
-    // Limpiamos los campos para permitir agregar uno nuevo
+
     ui->txtRut->clear();
     ui->txtNombre->clear();
     ui->txtClave->clear();
 
-    // Reactivamos el RUT por si estaba bloqueado
+
     ui->txtRut->setEnabled(true);
 
-    // Recargamos la tabla por si hubo cambios externos
+
     cargarDatosEnTabla();
 }
 
-// --- 2. FUNCIÓN MÁGICA: LLENAR CAMPOS AL TOCAR TABLA ---
-// (Debes ir al .ui, click derecho en la tabla -> Go to slot -> cellClicked)
+
 void ventanagestionclientes::on_tablaClientes_cellClicked(int row, int column)
 {
-    // Obtenemos los datos de la fila seleccionada
     QString rut  = ui->tablaClientes->item(row, 0)->text();
     QString nombre = ui->tablaClientes->item(row, 1)->text();
     QString clave = ui->tablaClientes->item(row, 2)->text();
 
-    // Los ponemos en las cajas de texto
     ui->txtRut->setText(rut);
     ui->txtNombre->setText(nombre);
     ui->txtClave->setText(clave);
 
-    // OJO: Bloqueamos el RUT porque es la LLAVE PRIMARIA. No se debe editar el RUT.
-    // Para cambiar un RUT, se borra el usuario y se crea otro.
+
     ui->txtRut->setEnabled(false);
 }
 
-// --- 3. FUNCIÓN MODIFICAR (LA QUE FALTABA) ---
+
 void ventanagestionclientes::on_btnModificar_clicked()
 {
     try {
@@ -96,12 +92,12 @@ void ventanagestionclientes::on_btnModificar_clicked()
 
         GestorBD gestor("banco.db");
 
-        // Llamamos a la función de modificar (asegúrate que exista en GestorBD.cpp)
+
         gestor.modificarCliente(rut.toStdString(), nombre.toStdString(), clave.toStdString());
 
         QMessageBox::information(this, "Éxito", "Usuario modificado correctamente.");
 
-        // Limpiamos todo
+
         on_btnCargar_clicked();
 
     } catch (exception &e) {
@@ -133,7 +129,7 @@ void ventanagestionclientes::on_btnAgregar_clicked()
 
         QMessageBox::information(this, "Éxito", "Usuario creado correctamente.");
 
-        on_btnCargar_clicked(); // Limpiamos y refrescamos
+        on_btnCargar_clicked();
 
     } catch (std::exception &e) {
         QMessageBox::critical(this, "Error", e.what());
@@ -142,7 +138,7 @@ void ventanagestionclientes::on_btnAgregar_clicked()
 
 void ventanagestionclientes::on_btnEliminar_clicked()
 {
-    // Validamos si hay algo seleccionado en la tabla O si hay un RUT escrito
+
     QString rut = ui->txtRut->text();
 
     if (rut.isEmpty()) {
@@ -165,7 +161,7 @@ void ventanagestionclientes::on_btnEliminar_clicked()
             GestorBD gestor("banco.db");
             gestor.eliminarCliente(rut.toStdString());
             QMessageBox::information(this, "Eliminado", "Cliente eliminado.");
-            on_btnCargar_clicked(); // Limpiar y refrescar
+            on_btnCargar_clicked();
         } catch (exception &e) {
             QMessageBox::critical(this, "Error", e.what());
         }

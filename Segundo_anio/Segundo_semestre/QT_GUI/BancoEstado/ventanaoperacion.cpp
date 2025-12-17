@@ -1,7 +1,7 @@
 #include "ventanaoperacion.h"
 #include "ui_ventanaoperacion.h"
 #include "ventanamenu.h"
-#include "backend/GestorBD.h" // Ojo con la ruta, ajustala si es necesario
+#include "backend/GestorBD.h"
 #include <QMessageBox>
 #include <stdexcept>
 #include <QIntValidator>
@@ -11,7 +11,7 @@ ventanaoperacion::ventanaoperacion(QWidget *parent)
     , ui(new Ui::ventanaoperacion)
 {
     ui->setupUi(this);
-    // Validación: Solo números positivos
+
     ui->txtMonto->setValidator(new QIntValidator(1, 99999999, this));
 }
 
@@ -35,7 +35,7 @@ void ventanaoperacion::on_btnVolver_clicked()
 void ventanaoperacion::on_btnAccion_clicked()
 {
     try {
-        // 1. Validaciones básicas de interfaz
+
         QString textoMonto = ui->txtMonto->text();
         QString textoDestino = ui->txtDestino->text();
 
@@ -51,10 +51,10 @@ void ventanaoperacion::on_btnAccion_clicked()
         if (rutDestino == rutUsuario)
             throw std::invalid_argument("No puedes transferirte a ti mismo.");
 
-        // 2. Lógica de Negocio (BD)
+
         GestorBD gestor("banco.db");
 
-        // A. Validar saldos y existencia
+        // Validar saldos y existencia
         int miId = gestor.obtenerIdCuentaPorRut(rutUsuario);
         if (miId == -1) throw std::runtime_error("Tu usuario no tiene cuenta activa.");
 
@@ -64,16 +64,15 @@ void ventanaoperacion::on_btnAccion_clicked()
         int idDestino = gestor.obtenerIdCuentaPorRut(rutDestino);
         if (idDestino == -1) throw std::runtime_error("El destinatario no existe.");
 
-        // B. Mover el dinero (Actualizar saldos)
+
         gestor.actualizarSaldo(miId, miSaldo - monto);
         gestor.actualizarSaldo(idDestino, gestor.obtenerSaldo(idDestino) + monto);
 
-        // C. GUARDAR EL COMPROBANTE (Esto es lo que te faltaba)
+
         gestor.registrarMovimiento("Transferencia", rutUsuario, rutDestino, (double)monto);
 
         QMessageBox::information(this, "Éxito", "Transferencia realizada y guardada.");
 
-        // Volver al menú
         on_btnVolver_clicked();
 
     } catch (const std::exception &e) {

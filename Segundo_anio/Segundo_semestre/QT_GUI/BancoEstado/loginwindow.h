@@ -9,21 +9,20 @@ QT_END_NAMESPACE
 
 class LoginWindow : public QMainWindow
 {
-    Q_OBJECT // <--- ¡ESTA MACRO ES VITAL PARA QUE QT FUNCIONE!
+    Q_OBJECT
 
 public:
-    // Constructor explícito que acepta un padre (parent) opcional
+
     explicit LoginWindow(QWidget *parent = nullptr);
 
-    // Destructor
+
     ~LoginWindow();
 
 private slots:
-    // Tu función del botón
     void on_btnIngresar_clicked();
 
 private:
     Ui::LoginWindow *ui;
 };
 
-#endif // LOGINWINDOW_H
+#endif

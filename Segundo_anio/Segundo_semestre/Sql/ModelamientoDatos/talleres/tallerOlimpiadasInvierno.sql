@@ -1,0 +1,168 @@
+/* Taller SQL Server - Olimpiadas de Invierno
+   Integrante: 
+   - Diego Saldaña
+*/
+
+--  BASE DE DATOS
+CREATE DATABASE TallerOlimpiadas;
+GO
+
+USE TallerOlimpiadas;
+GO
+
+-- CREACION DE TABLAS
+CREATE TABLE FEDERACION (
+    Nombre_Fed VARCHAR(50) NOT NULL,
+    Numero_Fed INT
+);
+
+CREATE TABLE ESTACION (
+    Codigo_Estacion VARCHAR(20) NOT NULL,
+    Nombre VARCHAR(50),
+    Contacto VARCHAR(50),
+    Direccion VARCHAR(100),
+    Kms_Totales INT
+);
+
+CREATE TABLE TELEFONO_ESTACION (
+    ID_Telefono INT NOT NULL,
+    Numero INT,
+    Codigo_Estacion VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE ADMINISTRACION (
+    Nombre_Fed VARCHAR(50) NOT NULL,
+    Codigo_Estacion VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE PISTA (
+    Cod_Pista INT NOT NULL,
+    Dificultad VARCHAR(20),
+    Longitud_Metros INT,
+    Codigo_Estacion VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE PRUEBA (
+    Cod_Prueba INT NOT NULL,
+    Vencedor VARCHAR(100),
+    Tiempo_Vencedor TIME
+);
+
+CREATE TABLE FECHA_PRUEBA (
+    ID_Fecha INT NOT NULL,
+    Fecha DATE,
+    Cod_Prueba INT NOT NULL
+);
+
+CREATE TABLE PRUEBA_PISTA (
+    Cod_Prueba INT NOT NULL,
+    Cod_Pista INT NOT NULL,
+    Fecha_Realizacion DATE
+);
+
+CREATE TABLE EQUIPO (
+    Nombre_Eq VARCHAR(50) NOT NULL,
+    Entrenador VARCHAR(50),
+    N_Esquiadores INT
+);
+
+CREATE TABLE ESQUIADOR (
+    DNI VARCHAR(20) NOT NULL,
+    Nombre VARCHAR(50),
+    Edad INT,
+    Nombre_Fed VARCHAR(50),
+    Nombre_Eq VARCHAR(50)
+);
+
+CREATE TABLE PARTICIPANTE (
+    N_Partic INT NOT NULL,
+    Fecha_Inscripcion DATE,
+    Posicion_Final INT,
+    Tiempo_Realizado TIME,
+    Cod_Prueba INT NOT NULL,
+    DNI_Esquiador VARCHAR(20),
+    Nombre_Eq VARCHAR(50)
+);
+
+--  CLAVES PRIMARIAS 
+ALTER TABLE FEDERACION ADD CONSTRAINT PK_FEDERACION PRIMARY KEY (Nombre_Fed);
+ALTER TABLE ESTACION ADD CONSTRAINT PK_ESTACION PRIMARY KEY (Codigo_Estacion);
+ALTER TABLE TELEFONO_ESTACION ADD CONSTRAINT PK_TELEFONO PRIMARY KEY (ID_Telefono);
+ALTER TABLE PISTA ADD CONSTRAINT PK_PISTA PRIMARY KEY (Cod_Pista);
+ALTER TABLE PRUEBA ADD CONSTRAINT PK_PRUEBA PRIMARY KEY (Cod_Prueba);
+ALTER TABLE FECHA_PRUEBA ADD CONSTRAINT PK_FECHA_PRUEBA PRIMARY KEY (ID_Fecha);
+ALTER TABLE EQUIPO ADD CONSTRAINT PK_EQUIPO PRIMARY KEY (Nombre_Eq);
+ALTER TABLE ESQUIADOR ADD CONSTRAINT PK_ESQUIADOR PRIMARY KEY (DNI);
+ALTER TABLE PARTICIPANTE ADD CONSTRAINT PK_PARTICIPANTE PRIMARY KEY (N_Partic);
+ALTER TABLE ADMINISTRACION ADD CONSTRAINT PK_ADMINISTRACION PRIMARY KEY (Nombre_Fed, Codigo_Estacion);
+ALTER TABLE PRUEBA_PISTA ADD CONSTRAINT PK_PRUEBA_PISTA PRIMARY KEY (Cod_Prueba, Cod_Pista);
+
+-- CLAVES FORANEAS (FK)
+ALTER TABLE TELEFONO_ESTACION ADD CONSTRAINT FK_TEL_ESTACION FOREIGN KEY (Codigo_Estacion) REFERENCES ESTACION (Codigo_Estacion);
+ALTER TABLE ADMINISTRACION ADD CONSTRAINT FK_ADMIN_FED FOREIGN KEY (Nombre_Fed) REFERENCES FEDERACION (Nombre_Fed);
+ALTER TABLE ADMINISTRACION ADD CONSTRAINT FK_ADMIN_EST FOREIGN KEY (Codigo_Estacion) REFERENCES ESTACION (Codigo_Estacion);
+ALTER TABLE PISTA ADD CONSTRAINT FK_PISTA_ESTACION FOREIGN KEY (Codigo_Estacion) REFERENCES ESTACION (Codigo_Estacion);
+ALTER TABLE FECHA_PRUEBA ADD CONSTRAINT FK_FECHA_PRUEBA FOREIGN KEY (Cod_Prueba) REFERENCES PRUEBA (Cod_Prueba);
+ALTER TABLE PRUEBA_PISTA ADD CONSTRAINT FK_PP_PRUEBA FOREIGN KEY (Cod_Prueba) REFERENCES PRUEBA (Cod_Prueba);
+ALTER TABLE PRUEBA_PISTA ADD CONSTRAINT FK_PP_PISTA FOREIGN KEY (Cod_Pista) REFERENCES PISTA (Cod_Pista);
+ALTER TABLE ESQUIADOR ADD CONSTRAINT FK_ESQ_FEDERACION FOREIGN KEY (Nombre_Fed) REFERENCES FEDERACION (Nombre_Fed);
+ALTER TABLE ESQUIADOR ADD CONSTRAINT FK_ESQ_EQUIPO FOREIGN KEY (Nombre_Eq) REFERENCES EQUIPO (Nombre_Eq);
+ALTER TABLE PARTICIPANTE ADD CONSTRAINT FK_PART_PRUEBA FOREIGN KEY (Cod_Prueba) REFERENCES PRUEBA (Cod_Prueba);
+ALTER TABLE PARTICIPANTE ADD CONSTRAINT FK_PART_ESQUIADOR FOREIGN KEY (DNI_Esquiador) REFERENCES ESQUIADOR (DNI);
+ALTER TABLE PARTICIPANTE ADD CONSTRAINT FK_PART_EQUIPO FOREIGN KEY (Nombre_Eq) REFERENCES EQUIPO (Nombre_Eq);
+
+--  INGRESO DE DATOS 
+
+-- Federaciones: UCM vs UTAL
+INSERT INTO FEDERACION (Nombre_Fed, Numero_Fed) VALUES 
+('FED_UCM', 101), 
+('FED_UTAL', 103);
+
+INSERT INTO ESTACION (Codigo_Estacion, Nombre, Contacto, Direccion, Kms_Totales) VALUES 
+('EST_01', 'Portillo', 'Juan P.', 'Los Andes', 50), 
+('EST_02', 'Valle Nevado', 'Maria S.', 'Stgo', 120);
+
+-- Los Computines (Profe Felipe) vs Magallanes (profe Hugo)
+INSERT INTO EQUIPO (Nombre_Eq, Entrenador, N_Esquiadores) VALUES 
+('Los_Computines', 'Felipe Tapia', 5), 
+('Magallanes', 'Hugo Araya', 11);
+
+INSERT INTO PRUEBA (Cod_Prueba, Vencedor, Tiempo_Vencedor) VALUES 
+(1, 'Pendiente', '00:00:00'), 
+(2, 'Pendiente', '00:00:00');
+
+--  Diego (UCM/Computines) vs Rival (UTAL/Magallanes)
+INSERT INTO ESQUIADOR (DNI, Nombre, Edad, Nombre_Fed, Nombre_Eq) VALUES 
+('22.036.610-3', 'Diego Saldaña', 20, 'FED_UCM', 'Los_Computines'), 
+('19.806.030-3', 'Rival Utalino', 22, 'FED_UTAL', 'Magallanes');
+
+INSERT INTO PISTA (Cod_Pista, Dificultad, Longitud_Metros, Codigo_Estacion) VALUES 
+(100, 'Alta', 500, 'EST_01'), 
+(200, 'Baja', 1000, 'EST_02');
+
+INSERT INTO TELEFONO_ESTACION (ID_Telefono, Numero, Codigo_Estacion) VALUES 
+(1, 999888777, 'EST_01');
+
+-- Fechas AÑO-MES-DIA 
+INSERT INTO FECHA_PRUEBA (ID_Fecha, Fecha, Cod_Prueba) VALUES 
+(1, '2025-07-15', 1);
+
+-- Administracion La FED_UCM administra Portillo
+INSERT INTO ADMINISTRACION (Nombre_Fed, Codigo_Estacion) VALUES 
+('FED_UCM', 'EST_01');
+
+-- Prueba realizada el 17 de Diciembre 
+INSERT INTO PRUEBA_PISTA (Cod_Prueba, Cod_Pista, Fecha_Realizacion) VALUES 
+(1, 100, '2025-12-17');
+
+-- Participante Diego se inscribe
+INSERT INTO PARTICIPANTE (N_Partic, Fecha_Inscripcion, Posicion_Final, Tiempo_Realizado, Cod_Prueba, DNI_Esquiador, Nombre_Eq) VALUES 
+(1, '2025-06-01', 0, '00:00:00', 1, '22.036.610-3', NULL);
+
+--  CONSULTAS SOLICITADAS
+-- Ver a todos los esquiadores y sus profes
+SELECT Nombre, Nombre_Eq FROM ESQUIADOR;
+-- Ver detalles del equipo de Hugo Araya
+SELECT * FROM EQUIPO WHERE Nombre_Eq = 'Magallanes';
+-- Ver estaciones
+SELECT Nombre, Kms_Totales FROM ESTACION;

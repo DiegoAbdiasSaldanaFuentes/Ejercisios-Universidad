@@ -60,7 +60,7 @@ GestorBD::~GestorBD() {
     }
 }
 
-// --- GESTIÓN DE CLIENTES ---
+//
 
 void GestorBD::agregarCliente(string rut, string nombre, string password) {
     sqlite3* db = (sqlite3*)conexion;
@@ -70,7 +70,7 @@ void GestorBD::agregarCliente(string rut, string nombre, string password) {
     if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK)
         throw runtime_error("Error SQL (Prepare agregarCliente): " + string(sqlite3_errmsg(db)));
 
-    // Usamos el cast -1 (SQLITE_TRANSIENT) para seguridad de memoria
+
     sqlite3_bind_text(stmt, 1, rut.c_str(), -1, (sqlite3_destructor_type)-1);
     sqlite3_bind_text(stmt, 2, nombre.c_str(), -1, (sqlite3_destructor_type)-1);
     sqlite3_bind_text(stmt, 3, password.c_str(), -1, (sqlite3_destructor_type)-1);
@@ -233,7 +233,6 @@ void GestorBD::actualizarSaldo(int idCuenta, double nuevoSaldo) {
     sqlite3_finalize(stmt);
 }
 
-// --- GESTIÓN DE HISTORIAL (MOVIMIENTOS) ---
 
 void GestorBD::registrarMovimiento(string tipo, string origen, string destino, double monto) {
     sqlite3* db = (sqlite3*)conexion;
@@ -262,14 +261,14 @@ string GestorBD::obtenerNombreCliente(string rut) {
     sqlite3* db = (sqlite3*)conexion;
     sqlite3_stmt* stmt;
     string sql = "SELECT nombre FROM clientes WHERE rut = ?";
-    string nombreEncontrado = "Usuario"; // Valor por defecto si falla
+    string nombreEncontrado = "Usuario";
 
     if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
-        // Usamos el cast -1 para seguridad, igual que en las otras funciones
+
         sqlite3_bind_text(stmt, 1, rut.c_str(), -1, (sqlite3_destructor_type)-1);
 
         if (sqlite3_step(stmt) == SQLITE_ROW) {
-            // Leemos la columna 0 (nombre)
+
             const char* val = (const char*)sqlite3_column_text(stmt, 0);
             if (val) {
                 nombreEncontrado = string(val);

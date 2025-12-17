@@ -1,6 +1,6 @@
 #include "cliente.h"
 
-//  INICIALIZACIÓN DE VARIABLES ESTÁTICAS  BORRAR EN UN FUTURO
+
 QList<Movimiento> Cliente::listaMovimientos;
 int Cliente::saldoCuenta = 500000;
 QString Cliente::nombreUsuario = "Usuario Prueba";
@@ -31,7 +31,6 @@ void Cliente::setNombre(QString nombre) {
     nombreUsuario = nombre;
 }
 
-// MÉTODOS DE HISTORIAL
 
 void Cliente::agregarMovimiento(QString rut, QString banco, int monto) {
     Movimiento nuevo;
@@ -54,7 +53,6 @@ void Cliente::eliminarMovimiento(int indice) {
 
 // Implementación de la sobrecarga
 void Cliente::operator+=(int monto) {
-    // Reutilizamos nuestro método estático
     Cliente::aumentarSaldo(monto);
 }
 

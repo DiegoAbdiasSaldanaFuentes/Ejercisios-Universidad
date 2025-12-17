@@ -3,10 +3,10 @@
 
 #include <QMainWindow>
 #include <string>
-#include "backend/GestorBD.h" // Importante
+#include "backend/GestorBD.h"
 
 namespace Ui {
-class ventanaoperacion; // Respetamos tu nombre en minúsculas
+class ventanaoperacion;
 }
 
 class ventanaoperacion : public QMainWindow
@@ -17,16 +17,14 @@ public:
     explicit ventanaoperacion(QWidget *parent = nullptr);
     ~ventanaoperacion();
 
-    // Función para recibir identidad
     void setRutUsuario(std::string rut);
 
 private slots:
     void on_btnVolver_clicked();
-    void on_btnAccion_clicked(); // Este es tu botón de transferir
-
+    void on_btnAccion_clicked();
 private:
     Ui::ventanaoperacion *ui;
-    std::string rutUsuario; // Aquí guardamos quién opera
+    std::string rutUsuario;
 };
 
-#endif // VENTANAOPERACION_H
+#endif

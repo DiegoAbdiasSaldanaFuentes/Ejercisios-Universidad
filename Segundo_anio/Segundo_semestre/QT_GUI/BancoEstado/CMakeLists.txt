@@ -15,10 +15,10 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
 
 set(TS_FILES BancoEstado_es_CL.ts)
 
-# 2. IMPORTANTE: Decirle a CMake dónde buscar los archivos .h de la base de datos
+# donde buscar los archivos .h de la base de datos
 include_directories(backend)
 
-# 3. LA LISTA MAESTRA DE ARCHIVOS (Todo debe estar aquí, una sola vez)
+# ARCHIVOS
 set(PROJECT_SOURCES
         # Archivos Principales
         main.cpp
@@ -41,7 +41,7 @@ set(PROJECT_SOURCES
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    # Aquí solo usamos la lista maestra, sin repetir nombres
+
     qt_add_executable(BancoEstado
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
@@ -63,7 +63,7 @@ endif()
 
 target_link_libraries(BancoEstado PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 
-# Ajustes para Windows y Mac
+
 set_target_properties(BancoEstado PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER com.example.BancoEstado
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
