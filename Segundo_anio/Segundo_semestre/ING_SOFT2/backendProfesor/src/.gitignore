@@ -1,0 +1,74 @@
+
+# ==========================================
+# NODE.JS – Gitignore Profesional
+# ==========================================
+
+# --- Node modules ---
+node_modules/
+
+# --- Output / build ---
+dist/
+build/
+out/
+coverage/
+temp/
+tmp/
+
+# --- Logs ---
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# --- Environment variables ---
+.env
+.env.*
+!.env.example       # allow example env file
+
+# --- Database ---
+*.sql
+*.sqlite
+*.db
+*.db-journal
+
+# --- OS / system files ---
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+._*
+
+# --- VSCode ---
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# --- IDE ---
+.idea/
+*.iml
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# --- Tests ---
+/test-results/
+junit.xml
+
+# --- TypeScript (if used) ---
+*.tsbuildinfo
+
+# --- Cache ---
+.nyc_output/
+.cache/
+.parcel-cache/
+.next/
+.nuxt/
+.svelte-kit/
+
+# --- DBeaver ---
+.dbeaver/
+.dbeaver-data/
