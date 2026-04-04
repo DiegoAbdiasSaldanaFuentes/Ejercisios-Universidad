@@ -3,7 +3,7 @@
 
 
 # Definimos el punto al que queremos acercarnos
-objetivo = 0
+objetivo = 3
 
 # --- LADO IZQUIERDO (Valores menores a 3) ---
 izq1 = 2.9
