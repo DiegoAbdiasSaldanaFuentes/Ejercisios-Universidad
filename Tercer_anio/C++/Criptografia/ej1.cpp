@@ -19,7 +19,7 @@ int main() {
     // Paso 1: "Simulamos" la creación de una clave pública 
     // Usamos primos medianos para que tu PC no explote, pero nota la diferencia.
     uint64_t p = 104729; 
-    uint64_t q = 15485863;
+    uint64_t q = 15485864;
     uint64_t n = p * q;
 
     std::cout << "--- Generacion de 'Clave' ---" << std::endl;
