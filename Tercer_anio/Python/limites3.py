@@ -12,7 +12,7 @@ except ZeroDivisionError:
     print("Sustitución directa fallida: Indeterminación matemática (División por cero). Se requiere estudio numérico.")
 
 # Paso 3: Estudio numérico mediante límites laterales
-print("\n--- INICIANDO ESTUDIO NUMÉRICO ---")
+print("\n--- INICIANDO ---")
 
 # Estas son las distancias con las que nos acercaremos al -3
 deltas = [0.1, 0.01, 0.001, 0.0001]
