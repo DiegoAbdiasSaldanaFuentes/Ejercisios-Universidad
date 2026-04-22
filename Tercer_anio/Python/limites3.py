@@ -1,6 +1,6 @@
 # Paso 1: Definición del problema
 def evaluar_limite(x):
-    return (x**2 + x - 6) / (x + 3)
+    return (x**2 + 8*x + 15) / (x**2 - x - 12)
 
 a = -3
 
