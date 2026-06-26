@@ -3,6 +3,7 @@ from tkinter import filedialog, messagebox
 import subprocess
 import time
 import os
+import shutil  # Importante para copiar el archivo rápidamente
 
 EJECUTABLES = {
     "AES-256": "aes.exe",
@@ -11,54 +12,71 @@ EJECUTABLES = {
     "ECC": "ecc.exe"
 }
 
+# Variable global para rastrear si vamos a procesar un archivo en lugar de texto manual
+ruta_archivo_cargado = None
+
+def al_modificar_texto(event):
+    """Si el usuario escribe algo a mano en el cuadro, desvinculamos el archivo cargado."""
+    global ruta_archivo_cargado
+    if ruta_archivo_cargado is not None:
+        ruta_archivo_cargado = None
+
 def cargar_archivo():
+    global ruta_archivo_cargado
     ruta = filedialog.askopenfilename(title="Seleccionar archivo")
     if ruta:
         try:
-            # Leemos en binario primero para evitar el crasheo de UTF-8
-            with open(ruta, "rb") as f:
-                datos_crudos = f.read()
+            tamano_bytes = os.path.getsize(ruta)
+            ruta_archivo_cargado = ruta
             
+            # Intentamos contar los caracteres asumiendo que es un archivo de texto
             try:
-                # Intentamos leerlo como texto normal
-                contenido = datos_crudos.decode("utf-8")
+                with open(ruta, "r", encoding="utf-8") as f:
+                    contenido = f.read()
+                    cantidad_caracteres = len(contenido)
+                    info_tamano = f"Caracteres: {cantidad_caracteres} (Tamaño en disco: {tamano_bytes} bytes)"
             except UnicodeDecodeError:
-                # Si crashea, significa que es un archivo encriptado binario. Lo mostramos como Hexadecimal.
-                contenido = datos_crudos.hex()
-                
-            txt_input.delete(1.0, tk.END)
-            txt_input.insert(tk.END, contenido)
-        except Exception as e:
-            messagebox.showerror("Error", f"No se pudo leer el archivo: {e}")
+                # Si falla, es porque es un archivo binario (ej. ya encriptado)
+                info_tamano = f"Tamaño en disco: {tamano_bytes} bytes (Archivo binario / encriptado)"
 
+            txt_input.delete(1.0, tk.END)
+            mensaje = (f"--- ARCHIVO SELECCIONADO ---\n"
+                       f"Ruta: {ruta}\n"
+                       f"{info_tamano}\n\n"
+                       f"(Para optimizar el rendimiento, el contenido no se muestra.\n"
+                       f"Se procesará directamente al ejecutar.)")
+            txt_input.insert(tk.END, mensaje)
+        except Exception as e:
+            messagebox.showerror("Error", f"No se pudo acceder al archivo: {e}")
 def ejecutar_criptografia():
+    global ruta_archivo_cargado
     algoritmo = var_algoritmo.get()
     modo = var_modo.get()
     hilos = spin_hilos.get()
     texto_entrada = txt_input.get(1.0, tk.END).strip()
 
-    if not texto_entrada:
+    if not ruta_archivo_cargado and not texto_entrada:
         messagebox.showwarning("Advertencia", "Ingresa texto o carga un archivo primero.")
         return
 
     try:
-        if modo == "Encriptar":
-            # Guardamos texto normal para que el C/C++ lo encripte
-            with open("input.txt", "w", encoding="utf-8") as f:
-                f.write(texto_entrada)
+        if ruta_archivo_cargado:
+            # Si se cargó un archivo, evitamos la UI y lo copiamos directamente a input.txt
+            shutil.copy2(ruta_archivo_cargado, "input.txt")
         else:
-            # Si vamos a desencriptar, la entrada de la UI debería ser Hexadecimal.
-            # Lo convertimos a binario real para que el C/C++ lo pueda leer.
-            try:
-                # Limpiamos espacios o saltos de línea por si acaso
-                hex_limpio = texto_entrada.replace(" ", "").replace("\n", "")
-                datos_binarios = bytes.fromhex(hex_limpio)
-                with open("input.txt", "wb") as f:
-                    f.write(datos_binarios)
-            except ValueError:
-                # Si falla, asumimos que no es hex y lo guardamos como texto normal
+            # Lógica para texto ingresado manualmente
+            if modo == "Encriptar":
                 with open("input.txt", "w", encoding="utf-8") as f:
                     f.write(texto_entrada)
+            else:
+                try:
+                    hex_limpio = texto_entrada.replace(" ", "").replace("\n", "")
+                    datos_binarios = bytes.fromhex(hex_limpio)
+                    with open("input.txt", "wb") as f:
+                        f.write(datos_binarios)
+                except ValueError:
+                    with open("input.txt", "w", encoding="utf-8") as f:
+                        f.write(texto_entrada)
                     
     except Exception as e:
         messagebox.showerror("Error de I/O", f"No se pudo escribir input.txt: {e}")
@@ -78,20 +96,25 @@ def ejecutar_criptografia():
         tiempo_total_ms = (tiempo_fin - tiempo_inicio) * 1000
 
         if os.path.exists("output.txt"):
+            tamano_out = os.path.getsize("output.txt")
+            
+            # Leer únicamente un fragmento del output (150 bytes) para no colapsar la UI
+            with open("output.txt", "rb") as f:
+                resultado_binario = f.read(150)
+            
             if modo == "Encriptar":
-                # Al encriptar, el archivo generado es binario. Lo pasamos a Hexadecimal para mostrarlo en Tkinter sin crashear.
-                with open("output.txt", "rb") as f:
-                    resultado_binario = f.read()
-                resultado = resultado_binario.hex()
+                preview = resultado_binario.hex()
             else:
-                # Al desencriptar, el archivo debería ser texto humano de nuevo.
-                with open("output.txt", "rb") as f:
-                    resultado_binario = f.read()
-                resultado = resultado_binario.decode("utf-8", errors="ignore")
+                preview = resultado_binario.decode("utf-8", errors="ignore")
+            
+            # Informar al usuario sin sobrecargar el Textbox
+            mensaje_salida = (f"--- PROCESO COMPLETADO ---\n"
+                              f"Se generó 'output.txt' ({tamano_out} bytes).\n\n"
+                              f"Vista previa (primeros bytes):\n{preview}...")
             
             txt_output.config(state=tk.NORMAL)
             txt_output.delete(1.0, tk.END)
-            txt_output.insert(tk.END, resultado)
+            txt_output.insert(tk.END, mensaje_salida)
             txt_output.config(state=tk.DISABLED)
             
             lbl_tiempo.config(text=f"Tiempo de ejecución ({algoritmo}): {tiempo_total_ms:.4f} ms", fg="#00ff00")
@@ -135,7 +158,11 @@ frame_entrada.pack(fill="both", expand=True, padx=10, pady=5)
 tk.Label(frame_entrada, text="4. Texto a procesar:", bg=bg_color, fg=fg_color, font=fuente_lbl).pack(anchor="w")
 txt_input = tk.Text(frame_entrada, height=7, bg="#1e1e1e", fg="#ffffff", font=("Consolas", 10))
 txt_input.pack(fill="x", pady=5)
-tk.Button(frame_entrada, text="Cargar desde archivo (.txt)", command=cargar_archivo, bg="#1f77b4", fg="white").pack(anchor="e")
+
+# Evento para detectar si el usuario escribe y resetear el archivo cargado
+txt_input.bind("<KeyPress>", al_modificar_texto)
+
+tk.Button(frame_entrada, text="Cargar desde archivo", command=cargar_archivo, bg="#1f77b4", fg="white").pack(anchor="e")
 
 tk.Button(ventana, text="▶ EJECUTAR", command=ejecutar_criptografia, font=("Helvetica", 12, "bold"), bg="#2ca02c", fg="white", height=2).pack(fill="x", padx=10, pady=10)
 
