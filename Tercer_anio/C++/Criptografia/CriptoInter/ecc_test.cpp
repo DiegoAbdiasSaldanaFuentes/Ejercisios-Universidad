@@ -1,70 +1,109 @@
 #include <iostream>
 #include <vector>
-#include <chrono>
-#include <fstream> 
-#include <string>  
-#include <omp.h>
-
-using namespace std;
+#include <fstream>
+#include <string>
+#include <cstdint>
 
 struct Punto {
-    uint64_t x;
-    uint64_t y;
-    Punto(uint64_t valX, uint64_t valY) : x(valX), y(valY) {}
+    uint64_t* x;
+    uint64_t* y;
+    Punto(uint64_t valX, uint64_t valY) {
+        x = new uint64_t(valX);
+        y = new uint64_t(valY);
+    }
+    ~Punto() {
+        delete x;
+        delete y;
+    }
 };
 
-Punto sumar_puntos(Punto P, Punto Q) {
-    if (P.x == 0 && P.y == 0) return Q;
-    if (Q.x == 0 && Q.y == 0) return P;
+Punto* sumar_puntos(const Punto* P, const Punto* Q) {
+    if (*P->x == 0 && *P->y == 0) return new Punto(*Q->x, *Q->y);
+    if (*Q->x == 0 && *Q->y == 0) return new Punto(*P->x, *P->y);
 
     uint64_t lambda;
-    if (P.x == Q.x && P.y == Q.y) {
-        if (P.y == 0) return Punto(0, 0); 
-        lambda = (3 * P.x * P.x) / (2 * P.y); 
+    if (*P->x == *Q->x && *P->y == *Q->y) {
+        if (*P->y == 0) return new Punto(0, 0);
+        lambda = (3 * (*P->x) * (*P->x)) / (2 * (*P->y));
     } else {
-        if (Q.x == P.x) return Punto(0, 0);
-        lambda = (Q.y - P.y) / (Q.x - P.x); 
+        if (*Q->x == *P->x) return new Punto(0, 0);
+        lambda = (*Q->y - *P->y) / (*Q->x - *P->x);
     }
 
-    uint64_t nx = lambda * lambda - P.x - Q.x;
-    uint64_t ny = lambda * (P.x - nx) - P.y;
-    return Punto(nx, ny);
+    uint64_t nx = lambda * lambda - *P->x - *Q->x;
+    uint64_t ny = lambda * (*P->x - nx) - *P->y;
+
+    return new Punto(nx, ny);
 }
 
-Punto multiplicacion_escalar(uint64_t k, Punto G) {
-    Punto resultado(0, 0); 
-    Punto actual(G.x, G.y);
+Punto* multiplicacion_escalar(uint64_t k, const Punto* G) {
+    Punto* resultado = new Punto(0, 0);
+    Punto* actual = new Punto(*G->x, *G->y);
 
     while (k > 0) {
-        if (k & 1) resultado = sumar_puntos(resultado, actual);
-        actual = sumar_puntos(actual, actual);
+        if (k & 1) {
+            Punto* temp = sumar_puntos(resultado, actual);
+            delete resultado;
+            resultado = temp;
+        }
+        Punto* temp_doble = sumar_puntos(actual, actual);
+        delete actual;
+        actual = temp_doble;
         k >>= 1;
     }
+    delete actual;
     return resultado;
 }
 
-int main(int argc, char* argv[]) {
-    if (argc < 3) return 1;
-    omp_set_num_threads(stoi(argv[2]));
-    string modo = argv[1];
+void procesar_archivo(const std::string& input_file, const std::string& output_file, const Punto* G, uint64_t llave) {
+    Punto* llave_generada = multiplicacion_escalar(llave, G);
+    uint64_t mascara = *llave_generada->x;
 
-    Punto G(5, 1);
-    uint64_t llave_privada = 123456; 
-    Punto llave_publica = multiplicacion_escalar(llave_privada, G);
-    uint64_t mascara = llave_publica.x; 
-
-    ifstream inFile("input.txt");
-    ofstream outFile("output.txt", ios::binary);
-    if (!inFile || !outFile) return 1;
-
-    string text((istreambuf_iterator<char>(inFile)), istreambuf_iterator<char>());
-
-    // Al usar una mascara XOR compartida, encriptar y desencriptar son matemáticamente idénticos.
-    #pragma omp parallel for
-    for (int i = 0; i < text.size(); ++i) {
-        text[i] ^= (char)(mascara + i);
+    std::ifstream archivo_entrada(input_file, std::ios::binary | std::ios::ate);
+    if (!archivo_entrada.is_open()) {
+        delete llave_generada;
+        return;
     }
 
-    outFile << text;
+    std::streamsize size = archivo_entrada.tellg();
+    archivo_entrada.seekg(0, std::ios::beg);
+    std::vector<char> buffer(size);
+    
+    if (!archivo_entrada.read(buffer.data(), size)) {
+        delete llave_generada;
+        return;
+    }
+    archivo_entrada.close();
+
+    for (std::streamsize i = 0; i < size; ++i) {
+        buffer[i] = buffer[i] ^ (char)(mascara + i);
+    }
+
+    std::ofstream archivo_salida(output_file, std::ios::binary);
+    archivo_salida.write(buffer.data(), size);
+    archivo_salida.close();
+
+    delete llave_generada;
+}
+
+int main(int argc, char* argv[]) {
+    if(argc < 4) return 1;
+
+    std::string modo = argv[1];
+    uint64_t clave;
+    
+    try {
+        clave = std::stoull(argv[3]);
+    } catch (...) {
+        return 1;
+    }
+
+    Punto* G = new Punto(5, 1);
+
+    if (modo == "-e" || modo == "-d") {
+        procesar_archivo("input.txt", "output.txt", G, clave);
+    }
+
+    delete G;
     return 0;
 }

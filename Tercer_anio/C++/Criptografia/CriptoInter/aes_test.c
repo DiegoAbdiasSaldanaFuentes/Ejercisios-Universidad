@@ -114,41 +114,59 @@ void aes_encrypt_block(uint8_t *input, uint8_t *output, uint8_t *roundKeys) {
     memcpy(output, state, 16);
 }
 
-int main(int argc, char *argv[]) {
-    if (argc < 3) return 1;
-    
-    omp_set_num_threads(atoi(argv[2]));
+// ==================== MAIN MODIFICADO PARA INTERFAZ (CTR MODE) ====================
+
+int main(int argc, char* argv[]) {
+    if (argc < 4) return 1;
+
+    char* modo = argv[1]; // "-e" o "-d" (En CTR hacen lo mismo)
+    char* clave_str = argv[3];
 
     FILE *in = fopen("input.txt", "rb");
     FILE *out = fopen("output.txt", "wb");
-    if (!in || !out) return 1;
 
-    fseek(in, 0, SEEK_END);
-    long size = ftell(in);
-    rewind(in);
+    if (!in || !out) {
+        printf("Error al abrir archivos\n");
+        return 1;
+    }
 
-    uint8_t *buffer = malloc(size + 16);
-    fread(buffer, 1, size, in);
-    long padded = ((size + 15) / 16) * 16;
-    memset(buffer + size, 0, padded - size); // Padding seguro
+    // 1. Preparar la clave desde la interfaz (rellenando hasta 32 bytes)
+    uint8_t key[32] = {0};
+    for(int i = 0; i < 32 && clave_str[i] != '\0'; i++) {
+        key[i] = clave_str[i];
+    }
 
-    uint8_t *out_buffer = malloc(padded);
-    uint8_t key[32] = {0}; 
     uint8_t roundKeys[240];
     key_expansion(key, roundKeys);
 
-    if (strcmp(argv[1], "-e") == 0) {
-        // ZONA CRITICA PARALELIZADA: Los hilos toman bloques de 16 bytes de forma independiente
-        #pragma omp parallel for
-        for (long i = 0; i < padded; i += 16) {
-            aes_encrypt_block(buffer + i, out_buffer + i, roundKeys);
+    // 2. Vector de Inicialización (Nonce/Counter) para CTR
+    uint8_t counter[16] = {
+        0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    };
+
+    uint8_t buffer[16];
+    uint8_t keystream[16];
+    size_t bytes_read;
+
+    // 3. Procesamiento en modo CTR (Funciona igual para encriptar y desencriptar)
+    while ((bytes_read = fread(buffer, 1, 16, in)) > 0) {
+        aes_encrypt_block(counter, keystream, roundKeys);
+
+        // XOR del texto con el keystream
+        for (size_t i = 0; i < bytes_read; i++) {
+            buffer[i] ^= keystream[i];
         }
-        fwrite(out_buffer, 1, padded, out);
-    } else {
-        fprintf(out, "[ERROR] Funciones inversas de AES no programadas.");
+
+        fwrite(buffer, 1, bytes_read, out);
+
+        // Incrementar el contador (Little Endian simple)
+        for (int i = 15; i >= 8; i--) {
+            if (++counter[i] != 0) break;
+        }
     }
 
-    fclose(in); fclose(out);
-    free(buffer); free(out_buffer);
+    fclose(in);
+    fclose(out);
     return 0;
 }
