@@ -1,3 +1,8 @@
+#***************************************************************************
+#     Integrantes: Victor Farias y Diego Saldaña
+#     Docente:  Dr. Rolando Suárez
+#***************************************************************************
+
 import customtkinter as ctk
 import tkinter as tk
 from tkinter import messagebox, filedialog
@@ -6,9 +11,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolb
 import numpy as np
 import sympy as sp
 
-# ==========================================
-# CLASE AUXILIAR: TOOLTIPS (Para Criterio 2)
-# ==========================================
+# Diseño GUI
 class ToolTip:
     def __init__(self, widget, text):
         self.widget = widget
@@ -32,13 +35,12 @@ class ToolTip:
             self.tooltip_window.destroy()
             self.tooltip_window = None
 
-# ==========================================
-# BLOQUE 1: MOTOR MATEMÁTICO
-# ==========================================
+
+#  MOTOR MATEMÁTICO
 class CalculadoraRiemann:
     def __init__(self):
         self.x = sp.Symbol('x')
-        # SINTAXIS AMIGABLE (Criterio 1): Soporta In, ln, sen, e, pi
+        # In, ln, sen, e, pi
         self.diccionario_reemplazos = {'sen': 'sin', 'ln': 'log', 'In': 'log', 'e': 'E', 'pi': 'pi'}
 
     def traducir_texto(self, texto):
@@ -65,7 +67,7 @@ class CalculadoraRiemann:
         y_der = f_num(x_der)
         y_medio = f_num(x_medio)
 
-        # CÁLCULO DE ÁREA REAL (Novedad 1)
+        # CALCULO DE ÁREA REAL 
         if calcular_area_real:
             y_izq, y_der, y_medio = np.abs(y_izq), np.abs(y_der), np.abs(y_medio)
             int_exacta = sp.integrate(sp.Abs(formula), (self.x, a, b)).evalf()
@@ -90,9 +92,8 @@ class CalculadoraRiemann:
             'area_real_activa': calcular_area_real
         }
 
-# ==========================================
-# BLOQUE 2: INTERFAZ DE USUARIO (GUI)
-# ==========================================
+
+#  INTERFAZ DE USUARIO 
 class AppVisualizador(ctk.CTk):
     def __init__(self):
         super().__init__()
@@ -105,18 +106,18 @@ class AppVisualizador(ctk.CTk):
         self.configurar_interfaz()
 
     def configurar_interfaz(self):
-        # --- PANEL IZQUIERDO SCROLLABLE (Evita que se corten opciones) ---
+        #  PANEL IZQUIERDO SCROLLABLE 
         self.panel_izq = ctk.CTkScrollableFrame(self, width=320)
         self.panel_izq.pack(side="left", fill="y", padx=10, pady=10)
         
         ctk.CTkLabel(self.panel_izq, text="Parámetros", font=("Arial", 20, "bold")).pack(pady=10)
         
-        # Entradas con Tooltips (Criterio 2)
+        # Entradas con Tooltips 
         self.input_f = self.crear_campo(self.panel_izq, "Función f(x) [ej: x^2, sen(x)]", "Soporta x^2, sen(x), ln(x), e^x, pi")
         self.input_a = self.crear_campo(self.panel_izq, "Límite inferior (a)", "Punto de inicio en el eje X")
         self.input_b = self.crear_campo(self.panel_izq, "Límite superior (b)", "Punto de fin en el eje X")
         
-        # COMPARADOR EN TIEMPO REAL (Novedad 2)
+        # COMPARADOR EN TIEMPO REAL
         self.lbl_n = ctk.CTkLabel(self.panel_izq, text="Cantidad de rectángulos (n): 20")
         self.lbl_n.pack(pady=(10,0))
         self.slider_n = ctk.CTkSlider(self.panel_izq, from_=1, to=100, number_of_steps=99, command=self.actualizar_slider)
@@ -124,7 +125,7 @@ class AppVisualizador(ctk.CTk):
         self.slider_n.pack(pady=5, fill="x", padx=20)
         ToolTip(self.slider_n, "Desliza para cambiar n en tiempo real")
 
-        # MULTIPLES GRÁFICOS SIMULTÁNEOS (Criterio 1)
+        # MULTIPLES GRÁFICOS SIMULTANEOS 
         ctk.CTkLabel(self.panel_izq, text="Métodos a visualizar:", font=("Arial", 12, "bold")).pack(pady=(10,0), anchor="w", padx=20)
         self.var_izq = ctk.BooleanVar(value=False)
         self.var_der = ctk.BooleanVar(value=False)
@@ -133,7 +134,7 @@ class AppVisualizador(ctk.CTk):
         ctk.CTkCheckBox(self.panel_izq, text="Derecho (Rojo)", variable=self.var_der, command=self.ejecutar_calculo).pack(pady=2, anchor="w", padx=20)
         ctk.CTkCheckBox(self.panel_izq, text="Punto Medio (Verde)", variable=self.var_med, command=self.ejecutar_calculo).pack(pady=2, anchor="w", padx=20)
 
-        # CÁLCULO DE ÁREA REAL (Novedad 1)
+        # CALCULO DE AREA REAL 
         self.var_area_real = ctk.BooleanVar(value=False)
         self.chk_real = ctk.CTkCheckBox(self.panel_izq, text="Calcular Área Real ∫|f(x)|dx", variable=self.var_area_real, text_color="orange", command=self.ejecutar_calculo)
         self.chk_real.pack(pady=10, anchor="w", padx=20)
@@ -143,7 +144,7 @@ class AppVisualizador(ctk.CTk):
         ctk.CTkButton(self.panel_izq, text="Calcular Manual", command=self.ejecutar_calculo, fg_color="green", hover_color="darkgreen").pack(pady=10, fill="x", padx=20)
         ctk.CTkButton(self.panel_izq, text="Limpiar", command=self.limpiar_datos).pack(pady=5, fill="x", padx=20)
         
-        # EXPORTACIÓN PDF/PNG (Novedad 3)
+        # EXPORTACION PDF/PNG
         btn_exportar = ctk.CTkButton(self.panel_izq, text="📄 Exportar Gráfico a PDF", command=self.exportar_grafico, fg_color="#A2142F", hover_color="#7A0F23")
         btn_exportar.pack(pady=5, fill="x", padx=20)
         ToolTip(btn_exportar, "Guarda el gráfico actual como PDF de alta calidad")
@@ -152,7 +153,7 @@ class AppVisualizador(ctk.CTk):
         self.lbl_resultados = ctk.CTkLabel(self.panel_izq, text="Resultados:\nEsperando datos...", justify="left", font=("Consolas", 12))
         self.lbl_resultados.pack(pady=15, padx=10)
 
-        # HISTORIAL DE CÁLCULOS (Novedad 4)
+        # HISTORIAL DE CALCULOS
         ctk.CTkLabel(self.panel_izq, text="Historial de Funciones:", font=("Arial", 12, "bold")).pack(anchor="w", padx=20)
         self.caja_historial = ctk.CTkTextbox(self.panel_izq, height=100)
         self.caja_historial.pack(pady=5, fill="x", padx=20)
@@ -160,7 +161,7 @@ class AppVisualizador(ctk.CTk):
         self.switch_tema = ctk.CTkSwitch(self.panel_izq, text="Modo Claro", command=self.cambiar_tema)
         self.switch_tema.pack(pady=10)
 
-        # --- PANEL DERECHO (Gráfico) ---
+        # PANEL DERECHO (Grafico) 
         self.panel_der = ctk.CTkFrame(self)
         self.panel_der.pack(side="right", fill="both", expand=True, padx=10, pady=10)
         
@@ -205,9 +206,8 @@ class AppVisualizador(ctk.CTk):
         except Exception as e:
             messagebox.showerror("Error", f"No se pudo guardar: {e}")
 
-    # ==========================================
-    # BLOQUE 3: CONTROLADOR Y DIBUJO
-    # ==========================================
+    
+    # CONTROLADOR Y DIBUJO
     def ejecutar_calculo(self):
         try:
             texto_f = self.input_f.get()
@@ -259,14 +259,14 @@ class AppVisualizador(ctk.CTk):
             
             if area_real: y_curva = np.abs(y_curva)
             
-            # RENDERIZADO MATEMÁTICO LaTeX (Criterio 2)
+            # RENDERIZADO MATEMATICO LaTeX 
             lbl_funcion = f"${sp.latex(formula)}$"
             if area_real: lbl_funcion = f"$|{sp.latex(formula)}|$"
             
             self.eje.plot(x_curva, y_curva, color='black', linewidth=2.5, label=f"f(x) = {lbl_funcion}")
             self.eje.axhline(0, color='gray', linewidth=1) 
 
-            # Múltiples Gráficos Simultáneos con transparencias (Criterio 1)
+            # Multiples Graficos Simultaneos con transparencias 
             if self.var_izq.get():
                 self.eje.bar(datos['x_izq'], datos['y_izq'], width=datos['dx'], align='edge', alpha=0.3, edgecolor='blue', facecolor='cyan', linewidth=1.5, label="Izq")
             if self.var_der.get():
@@ -282,7 +282,7 @@ class AppVisualizador(ctk.CTk):
         except ValueError as e:
             messagebox.showerror("Error", str(e))
         except Exception as e:
-            pass # Evita crashes por inputs a medias durante el slide
+            pass # Evita crashes por inputs a medias durante el slide en caso de errores inesperados
 
 if __name__ == "__main__":
     app = AppVisualizador()
