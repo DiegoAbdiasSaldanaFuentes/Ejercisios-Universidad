@@ -10,4 +10,6 @@ fun main() {
     for(fruta in frutas){
         println("Fruta: $fruta")
     }
+
+
 }
