@@ -10,7 +10,6 @@ fun main(){
         in 50..69 -> "Reprobado"
         else -> "Reprobado"
     }
-    println(seed =23, Lon= 20 ))
 
     println("Resultado: $resultados")
 }
