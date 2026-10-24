@@ -1,0 +1,15 @@
+/* You can add global styles to this file, and also import other style files */
+
+.body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #373849;
+}
+
+.page{
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

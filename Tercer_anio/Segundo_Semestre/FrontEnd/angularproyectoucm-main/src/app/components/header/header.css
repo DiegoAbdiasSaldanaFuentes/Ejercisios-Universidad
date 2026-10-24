@@ -1,0 +1,32 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #373849;
+  color: white;
+}
+
+.header__logo {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.header__nav {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.header__link {
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem;
+}
+
+.header__link:hover {
+  background-color: #555;
+}
+
+.header__link.active {
+  background-color: #555;
+}
